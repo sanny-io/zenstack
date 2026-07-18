@@ -12,6 +12,7 @@ export default class DataSourceValidator implements AstValidator<DataSource> {
         validateDuplicatedDeclarations(ds, ds.fields, accept);
         this.validateProvider(ds, accept);
         this.validateUrl(ds, accept);
+        this.validateName(ds, accept);
     }
 
     private validateProvider(ds: DataSource, accept: ValidationAcceptor) {
@@ -107,6 +108,20 @@ export default class DataSourceValidator implements AstValidator<DataSource> {
             accept('error', `"${urlField.name}" must be set to a string literal or an invocation of "env" function`, {
                 node: urlField.value,
             });
+        }
+    }
+
+    private validateName(ds: DataSource, accept: ValidationAcceptor) {
+        if (ds.name !== 'db') {
+            const modelUsesNativeTypeMapping = ds.$container.declarations.filter(isDataModel).some(
+                (dm) => dm.fields.some((f) => f.attributes.some((attr) => attr.decl.$refText.startsWith('@db.')))
+            );
+
+            if (modelUsesNativeTypeMapping) {
+                accept('warning', 'datasource should be named "db" when using native type mapping', {
+                    node: ds,
+                });
+            }
         }
     }
 }
