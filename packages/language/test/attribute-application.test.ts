@@ -1,5 +1,5 @@
 import { describe, it } from 'vitest';
-import { loadSchema, loadSchemaWithError } from './utils';
+import { loadSchema, loadSchemaWithError, loadSchemaWithWarning } from './utils';
 
 describe('Attribute application validation tests', () => {
     describe('Model-level policy attributes (@@allow, @@deny)', () => {
@@ -610,6 +610,22 @@ describe('Attribute application validation tests', () => {
             }
             `,
             /relation "bar" is not optional/,
+        );
+    });
+
+    it('warns when datasource is not named "db" and model uses native type mapping', async () => {
+        await loadSchemaWithWarning(
+            `
+            datasource ds {
+                provider = 'sqlite'
+                url      = 'file:./dev.db'
+            }
+
+            model User {
+                id String @id @db.Text
+            }
+            `,
+            'datasource should be named "db" when using native type mapping',
         );
     });
 });

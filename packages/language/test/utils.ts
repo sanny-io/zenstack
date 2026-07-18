@@ -40,3 +40,24 @@ export async function loadSchemaWithError(schema: string, error: string | RegExp
         );
     }
 }
+
+export async function loadSchemaWithWarning(schema: string, warning: string | RegExp) {
+    // create a temp file
+    const tempFile = path.join(os.tmpdir(), `zenstack-schema-${crypto.randomUUID()}.zmodel`);
+    fs.writeFileSync(tempFile, schema);
+
+    const r = await loadDocument(tempFile, pluginDocs);
+    expect(r.success).toBe(true);
+    invariant(r.success);
+    if (typeof warning === 'string') {
+        expect(r).toSatisfy(
+            (r) => r.warnings.some((w) => w.toString().toLowerCase().includes(warning.toLowerCase())),
+            `Expected warning message to include "${warning}" but got: ${r.warnings.map((w) => w.toString()).join(', ')}`,
+        );
+    } else {
+        expect(r).toSatisfy(
+            (r) => r.warnings.some((w) => warning.test(w)),
+            `Expected warning message to match "${warning}" but got: ${r.warnings.map((w) => w.toString()).join(', ')}`,
+        );
+    }
+}
