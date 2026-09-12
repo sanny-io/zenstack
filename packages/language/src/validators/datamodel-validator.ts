@@ -19,6 +19,7 @@ import {
 } from '../generated/ast';
 import {
     getAllAttributes,
+    getAllFieldAttributes,
     getAllFields,
     getAttribute,
     getAttributeArg,
@@ -87,7 +88,9 @@ export default class DataModelValidator implements AstValidator<DataModel> {
                 }
 
                 const isArray = idField.type.array;
-                const isScalar = SCALAR_TYPES.includes(idField.type.type as (typeof SCALAR_TYPES)[number]);
+                const isScalar = SCALAR_TYPES.includes(
+                    (idField.$resolvedType?.decl ?? idField.type.type) as (typeof SCALAR_TYPES)[number],
+                );
                 const isValidType = isScalar || isEnum(idField.type.reference?.ref);
 
                 if (isArray || !isValidType) {
@@ -160,7 +163,7 @@ export default class DataModelValidator implements AstValidator<DataModel> {
         // group field attributes carrying `@@@onceInModel` by their attribute declaration
         const occurrences = new Map<Attribute, DataFieldAttribute[]>();
         for (const field of getAllFields(dm)) {
-            for (const attr of field.attributes) {
+            for (const attr of getAllFieldAttributes(field)) {
                 const decl = attr.decl.ref;
                 if (decl && hasAttribute(decl, '@@@onceInModel')) {
                     const list = occurrences.get(decl) ?? [];

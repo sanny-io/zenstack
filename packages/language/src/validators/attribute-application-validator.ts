@@ -1,7 +1,7 @@
 import { invariant } from '@zenstackhq/common-helpers';
 import { AstUtils, type ValidationAcceptor } from 'langium';
 import pluralize from 'pluralize';
-import type { BinaryExpr, DataModel, Expression } from '../ast';
+import type { BinaryExpr, DataModel, Expression, TypeAlias, TypeAliasThisField } from '../ast';
 import {
     ArrayExpr,
     Attribute,
@@ -22,10 +22,13 @@ import {
     isModel,
     isReferenceExpr,
     isStringLiteral,
+    isTypeAlias,
+    isTypeAliasThisField,
     isTypeDef,
 } from '../generated/ast';
 import {
     getAllAttributes,
+    getAllFieldAttributes,
     getAttributeArg,
     getContainingDataModel,
     getDataSourceProvider,
@@ -141,12 +144,22 @@ export default class AttributeApplicationValidator implements AstValidator<Attri
         }
 
         const targetDecl = attr.$container;
+        if (
+            (isTypeAlias(targetDecl) || isTypeAliasThisField(targetDecl)) &&
+            !hasAttribute(attr.decl.ref!, '@@@validation')
+        ) {
+            accept('error', `attribute "${decl.name}" cannot be used with type aliases`, { node: attr });
+        }
+
         if (decl.name === '@@@targetField' && !isAttribute(targetDecl)) {
             accept('error', `attribute "${decl.name}" can only be used on attribute declarations`, { node: attr });
             return;
         }
 
-        if (isDataField(targetDecl) && !isValidAttributeTarget(decl, targetDecl)) {
+        if (
+            (isDataField(targetDecl) || isTypeAlias(targetDecl) || isTypeAliasThisField(targetDecl)) &&
+            !isValidAttributeTarget(decl, targetDecl)
+        ) {
             accept('error', `attribute "${decl.name}" cannot be used on this type of field`, { node: attr });
         }
 
@@ -242,7 +255,11 @@ export default class AttributeApplicationValidator implements AstValidator<Attri
             return;
         }
 
-        const allAttributes = contextDataModel ? getAllAttributes(contextDataModel) : attr.$container.attributes;
+        const allAttributes = contextDataModel
+            ? getAllAttributes(contextDataModel)
+            : isDataField(attr.$container)
+              ? getAllFieldAttributes(attr.$container)
+              : attr.$container.attributes;
         const duplicates = allAttributes.filter((a) => a.decl.ref === attrDecl && a !== attr);
         if (duplicates.length > 0) {
             accept('error', `Attribute "${attrDecl.name}" can only be applied once`, { node: attr });
@@ -653,10 +670,16 @@ function assignableToAttributeParam(
             // attribute parameter type is ContextType, need to infer type from
             // the attribute's container
             if (isDataField(attr.$container)) {
-                if (!attr.$container?.type?.type) {
-                    return genericError;
+                if (isTypeAlias(attr.$container?.type?.reference?.ref)) {
+                    dstType = attr.$container.type.reference.ref.type;
+                } else {
+                    if (!attr.$container?.type?.type) {
+                        return genericError;
+                    }
+
+                    dstType = mapBuiltinTypeToExpressionType(attr.$container.type.type);
                 }
-                dstType = mapBuiltinTypeToExpressionType(attr.$container.type.type);
+
                 dstIsArray = attr.$container.type.array;
             } else {
                 dstType = 'Any';
@@ -678,7 +701,7 @@ function assignableToAttributeParam(
     }
 }
 
-function isValidAttributeTarget(attrDecl: Attribute, targetDecl: DataField) {
+function isValidAttributeTarget(attrDecl: Attribute, targetDecl: DataField | TypeAlias | TypeAliasThisField) {
     const targetField = attrDecl.attributes.find((attr) => attr.decl.ref?.name === '@@@targetField');
     if (!targetField?.args[0]) {
         // no field type constraint
@@ -697,43 +720,51 @@ function isValidAttributeTarget(attrDecl: Attribute, targetDecl: DataField) {
         .filter((name): name is string => !!name);
 
     let allowed = false;
+    const targetDeclType = isDataField(targetDecl)
+        ? targetDecl.type.type
+        : targetDecl.$resolvedType
+          ? targetDecl.$resolvedType.decl
+          : (targetDecl as TypeAlias).type;
     for (const allowedType of fieldTypes) {
         switch (allowedType) {
             case 'StringField':
-                allowed = allowed || targetDecl.type.type === 'String';
+                allowed = allowed || targetDeclType === 'String';
                 break;
             case 'IntField':
-                allowed = allowed || targetDecl.type.type === 'Int';
+                allowed = allowed || targetDeclType === 'Int';
                 break;
             case 'BigIntField':
-                allowed = allowed || targetDecl.type.type === 'BigInt';
+                allowed = allowed || targetDeclType === 'BigInt';
                 break;
             case 'FloatField':
-                allowed = allowed || targetDecl.type.type === 'Float';
+                allowed = allowed || targetDeclType === 'Float';
                 break;
             case 'DecimalField':
-                allowed = allowed || targetDecl.type.type === 'Decimal';
+                allowed = allowed || targetDeclType === 'Decimal';
                 break;
             case 'BooleanField':
-                allowed = allowed || targetDecl.type.type === 'Boolean';
+                allowed = allowed || targetDeclType === 'Boolean';
                 break;
             case 'DateTimeField':
-                allowed = allowed || targetDecl.type.type === 'DateTime';
+                allowed = allowed || targetDeclType === 'DateTime';
                 break;
             case 'JsonField':
-                allowed = allowed || targetDecl.type.type === 'Json';
+                allowed = allowed || targetDeclType === 'Json';
                 break;
             case 'BytesField':
-                allowed = allowed || targetDecl.type.type === 'Bytes';
+                allowed = allowed || targetDeclType === 'Bytes';
                 break;
             case 'ModelField':
-                allowed = allowed || isDataModel(targetDecl.type.reference?.ref);
+                allowed = allowed || isDataModel((targetDecl as DataField).type.reference?.ref);
                 break;
             case 'TypeDefField':
-                allowed = allowed || isTypeDef(targetDecl.type.reference?.ref);
+                allowed = allowed || isTypeDef((targetDecl as DataField).type.reference?.ref);
                 break;
             case 'ListField':
-                allowed = allowed || (!isDataModel(targetDecl.type.reference?.ref) && targetDecl.type.array);
+                allowed =
+                    allowed ||
+                    (!isDataModel((targetDecl as DataField).type.reference?.ref) &&
+                        (targetDecl as DataField).type.array);
                 break;
             default:
                 break;

@@ -26,6 +26,7 @@ import {
     isNullExpr,
     isReferenceExpr,
     isStringLiteral,
+    isTypeAlias,
     isTypeDef,
     LiteralExpr,
     Model,
@@ -287,6 +288,8 @@ export class PrismaSchemaGenerator {
             // model, enum, or type-def
             if (isTypeDef(field.type.reference.ref)) {
                 fieldType = 'Json';
+            } else if (isTypeAlias(field.type.reference.ref)) {
+                fieldType = field.type.reference.ref.type;
             } else {
                 fieldType = field.type.reference.ref.name;
             }

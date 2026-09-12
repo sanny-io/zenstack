@@ -25,6 +25,7 @@ import {
     isReferenceExpr,
     isStringLiteral,
     isTypeDef,
+    type TypeAlias,
     type Attribute,
     type AttributeParam,
     type BinaryExpr,
@@ -43,11 +44,13 @@ import {
     type ModelImport,
     type ReferenceExpr,
     type TypeDef,
+    isTypeAlias,
 } from './generated/ast';
 
 export type AttributeTarget =
     | DataModel
     | TypeDef
+    | TypeAlias
     | DataField
     | Enum
     | EnumField
@@ -687,6 +690,14 @@ export function getAllFields(
 
     fields.push(...decl.fields.filter((f) => includeIgnored || !hasAttribute(f, '@ignore')));
     return fields;
+}
+
+export function getAllFieldAttributes(field: DataField) {
+    const attributes: DataFieldAttribute[] = [...field.attributes];
+    if (isTypeAlias(field.type?.reference?.ref)) {
+        attributes.push(...field.type.reference.ref.this.attributes);
+    }
+    return attributes;
 }
 
 /**

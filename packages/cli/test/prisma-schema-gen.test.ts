@@ -91,4 +91,21 @@ model User {
         expect(prismaSchemaText.includes('@ds.JsonB')).toBe(true);
         expect(prismaSchemaText.includes('@ds.ByteA')).toBe(true);
     });
+
+    it('renames type aliases', async () => {
+        const model = await loadSchema(`
+model User {
+    id   String   @id
+    name UserName
+}
+
+type UserName = String
+        `);
+
+        const generator = new PrismaSchemaGenerator(model);
+        const prismaSchemaText = await generator.generate();
+
+        expect(prismaSchemaText.includes('name UserName')).toBe(false);
+        expect(prismaSchemaText.includes('name String')).toBe(true);
+    });
 });

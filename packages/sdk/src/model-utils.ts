@@ -3,6 +3,7 @@ import {
     isLiteralExpr,
     isModel,
     isTypeDef,
+    type TypeAlias,
     type AstNode,
     type Attribute,
     type AttributeParam,
@@ -57,7 +58,7 @@ export function isIdField(field: DataField, contextModel: DataModel) {
 }
 
 export function hasAttribute(
-    decl: DataModel | TypeDef | DataField | Enum | EnumField | FunctionDecl | Attribute | AttributeParam,
+    decl: DataModel | TypeDef | TypeAlias | DataField | Enum | EnumField | FunctionDecl | Attribute | AttributeParam,
     name: string,
 ) {
     return !!getAttribute(decl, name);

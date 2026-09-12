@@ -895,4 +895,100 @@ type Profile with Strict {
             },
         });
     });
+
+    it('supports type aliases', async () => {
+        const { schema } = await generateTsSchema(`
+            model User {
+                name UserName
+                id   Int   @id
+            }
+
+            type UserName = String
+            `);
+
+        console.log({ schema });
+    });
+
+    it('supports type aliases with validation attributes', async () => {
+        const { schema } = await generateTsSchema(`
+            model User {
+                id   Int   @id
+                name UserName
+            }
+
+            type UserName = String @length(2, 16)
+            `);
+
+        console.log({ schema });
+    });
+
+    it('allows type aliases to be used with functions', async () => {
+        const { schema } = await generateTsSchema(`
+            model User {
+                id   Int   @id
+                name UserName @startsWith('user_')
+            }
+
+            type UserName = String @length(1, 5)
+            `);
+
+        console.log({ schema });
+    });
+
+    it('allows type aliases to be used with default values', async () => {
+        const { schema } = await generateTsSchema(`
+            model User {
+                name UserId @default('')
+                id   String @id
+            }
+
+            type UserId = String @id
+            `);
+
+        console.log({ schema });
+    });
+
+    it('test', async () => {
+        const { schema } = await generateTsSchema(`
+            model User {
+                name UserId
+                id   String @id
+            }
+
+            type UserId = Int @lt(5)
+            `);
+
+        console.log({ schema });
+    });
+
+    it('test2', async () => {
+        const { schema } = await generateTsSchema(`
+            model User {
+                id UserId @id @test
+            }
+
+            type UserId = String
+
+            attribute @test() @@@once @@@validation
+            `);
+
+        console.log({ schema });
+    });
+
+    it('test2333', async () => {
+        const { schema } = await generateTsSchema(`
+                model User {
+                    id    String @id
+                    email Email
+                }
+
+                type Email extends String {
+                    this String
+
+                    @@validate(isEmail(this))
+                }
+            `);
+
+        console.log({ schema });
+    });
 });

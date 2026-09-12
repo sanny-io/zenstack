@@ -1,0 +1,24 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id       String    @id @default(nanoid())
+    name     UserName
+    contacts Contact[]
+    age      Age?      @default(18)
+}
+
+type UserName extends String {
+    this String @length(2, 16)
+}
+
+type Contact extends String {
+    this String @phone
+}
+
+type Age extends Int {
+    this Int @gte(18)
+}
+

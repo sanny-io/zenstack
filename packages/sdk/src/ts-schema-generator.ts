@@ -27,18 +27,22 @@ import {
     isProcedure,
     isReferenceExpr,
     isThisExpr,
+    isTypeAlias,
     isTypeDef,
     isUnaryExpr,
     LiteralExpr,
     MemberAccessExpr,
     Procedure,
     ReferenceExpr,
+    TypeAlias,
+    TypeAliasThisField,
     TypeDef,
     UnaryExpr,
     type Model,
 } from '@zenstackhq/language/ast';
 import {
     getAllAttributes,
+    getAllFieldAttributes,
     getAllFields,
     getAttributeArg,
     isDataFieldReference,
@@ -235,6 +239,19 @@ export class TsSchemaGenerator {
                       ),
                   ]
                 : []),
+
+            // typeAlises
+            ...(model.declarations.some(isTypeAlias)
+                ? [
+                      ts.factory.createPropertyDeclaration(
+                          undefined,
+                          'typeAliases',
+                          undefined,
+                          undefined,
+                          this.createAsConst(this.createTypeAliasesObject(model)),
+                      ),
+                  ]
+                : []),
         ];
 
         // enums
@@ -367,10 +384,23 @@ export class TsSchemaGenerator {
         return model.declarations.filter((d): d is TypeDef => isTypeDef(d) && !hasAttribute(d, '@@ignore'));
     }
 
+    private getAllTypeAliases(model: Model) {
+        return model.declarations.filter((d): d is TypeAlias => isTypeAlias(d) && !hasAttribute(d, '@@ignore'));
+    }
+
     private createTypeDefsObject(model: Model, lite: boolean): ts.Expression {
         return ts.factory.createObjectLiteralExpression(
             this.getAllTypeDefs(model).map((td) =>
                 ts.factory.createPropertyAssignment(td.name, this.createTypeDefObject(td, lite)),
+            ),
+            true,
+        );
+    }
+
+    private createTypeAliasesObject(model: Model): ts.Expression {
+        return ts.factory.createObjectLiteralExpression(
+            this.getAllTypeAliases(model).map((ta) =>
+                ts.factory.createPropertyAssignment(ta.name, this.createTypeAliasObject(ta)),
             ),
             true,
         );
@@ -544,6 +574,55 @@ export class TsSchemaGenerator {
         return ts.factory.createObjectLiteralExpression(fields, true);
     }
 
+    private createTypeAliasObject(ta: TypeAlias): ts.Expression {
+        const allAttributes = ta.attributes;
+
+        const fields: ts.PropertyAssignment[] = [
+            // name
+            ts.factory.createPropertyAssignment('name', ts.factory.createStringLiteral(ta.name)),
+            ts.factory.createPropertyAssignment('type', ts.factory.createStringLiteral(ta.type)),
+            ts.factory.createPropertyAssignment('this', this.createTypeAliasThisObject(ta.this)),
+
+            // attributes
+            ...(allAttributes.length > 0
+                ? [
+                      ts.factory.createPropertyAssignment(
+                          'attributes',
+                          this.createAttributesTypeAssertion(
+                              ts.factory.createArrayLiteralExpression(
+                                  allAttributes.map((attr) => this.createAttributeObject(attr)),
+                                  true,
+                              ),
+                          ),
+                      ),
+                  ]
+                : []),
+        ];
+
+        return ts.factory.createObjectLiteralExpression(fields, true);
+    }
+
+    private createTypeAliasThisObject(thisField: TypeAliasThisField) {
+        const attributes = thisField.attributes;
+        const fields: ts.PropertyAssignment[] = [
+            ...(attributes.length > 0
+                ? [
+                      ts.factory.createPropertyAssignment(
+                          'attributes',
+                          this.createAttributesTypeAssertion(
+                              ts.factory.createArrayLiteralExpression(
+                                  attributes.map((attr) => this.createAttributeObject(attr)),
+                                  true,
+                              ),
+                          ),
+                      ),
+                  ]
+                : []),
+        ];
+
+        return ts.factory.createObjectLiteralExpression(fields, true);
+    }
+
     // Emits the `params` metadata for a parameterized computed field. Shape mirrors
     // `ProcedureParam` (`Record<string, { name; type; array?; optional? }>`). It is read at
     // runtime (to forward args), by the zod input-validation factory, and by the ORM types that
@@ -592,6 +671,15 @@ export class TsSchemaGenerator {
             // type
             ts.factory.createPropertyAssignment('type', this.generateFieldTypeLiteral(field)),
         ];
+
+        if (isTypeAlias(field.type.reference?.ref)) {
+            objectFields.push(
+                ts.factory.createPropertyAssignment(
+                    'aliasedFrom',
+                    ts.factory.createStringLiteral(field.type.reference.ref.name),
+                ),
+            );
+        }
 
         if (contextModel && ModelUtils.isIdField(field, contextModel)) {
             objectFields.push(ts.factory.createPropertyAssignment('id', ts.factory.createTrue()));
@@ -651,7 +739,8 @@ export class TsSchemaGenerator {
             objectFields.push(ts.factory.createPropertyAssignment('isDiscriminator', ts.factory.createTrue()));
         }
 
-        const attributes = lite ? field.attributes.filter((attr) => isLiteAttribute(attr.decl.ref!)) : field.attributes;
+        const fieldAttributes = getAllFieldAttributes(field);
+        const attributes = lite ? fieldAttributes.filter((attr) => isLiteAttribute(attr.decl.ref!)) : fieldAttributes;
 
         if (attributes.length > 0) {
             objectFields.push(
@@ -1083,10 +1172,14 @@ export class TsSchemaGenerator {
             'Field type must be a primitive, reference, or Unsupported',
         );
 
+        // const type = field.type.type ?? (field?.$resolvedType?.decl as ExpressionType) ?? field.type.reference?.$refText ?? 'Unsupported';
+
         return field.type.type
             ? ts.factory.createStringLiteral(field.type.type)
             : field.type.reference
-              ? ts.factory.createStringLiteral(field.type.reference.$refText)
+              ? isTypeAlias(field.type.reference.ref)
+                  ? ts.factory.createStringLiteral(field.type.reference.ref.type)
+                  : ts.factory.createStringLiteral(field.type.reference.$refText)
               : // `Unsupported` type
                 ts.factory.createStringLiteral('Unsupported');
     }

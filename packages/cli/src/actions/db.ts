@@ -553,6 +553,7 @@ export async function runPull(options: PullOptions) {
                             field.attributes.splice(index, 1);
                             getModelChanges(originalDataModel.name).deletedAttributes.push(
                                 colors.yellow(
+                                    // @ts-expect-error
                                     `- ${attr.decl.$refText} from field: ${originalDataModel.name}.${field.name}`,
                                 ),
                             );

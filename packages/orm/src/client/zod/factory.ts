@@ -1679,7 +1679,9 @@ export class ZodSchemaFactory<
                 let fieldSchema = this.makeScalarSchema(fieldDef.type, fieldDef.attributes);
 
                 if (fieldDef.array) {
-                    fieldSchema = ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
+                    fieldSchema = fieldDef.aliasedFrom
+                        ? fieldSchema.array()
+                        : ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
                     fieldSchema = z
                         .union([
                             fieldSchema,
@@ -2056,7 +2058,9 @@ export class ZodSchemaFactory<
                 }
 
                 if (fieldDef.array) {
-                    const arraySchema = ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
+                    const arraySchema = fieldDef.aliasedFrom
+                        ? fieldSchema.array()
+                        : ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
                     fieldSchema = z.union([
                         arraySchema,
                         z

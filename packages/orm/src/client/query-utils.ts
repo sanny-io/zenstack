@@ -67,6 +67,10 @@ export function getTypeDef(schema: SchemaDef, type: string) {
     return schema.typeDefs?.[type];
 }
 
+export function getTypeAlias(schema: SchemaDef, typeAlias: string) {
+    return schema.typeAliases?.[typeAlias];
+}
+
 /**
  * Whether any model, type def, or field in the schema carries `@@map`/`@map`. Answering it walks
  * every model and field, and it is asked once per query-executor construction, so the (immutable)
@@ -107,6 +111,14 @@ export function requireTypeDef(schema: SchemaDef, type: string) {
         throw createInternalError(`Type "${type}" not found in schema`, type);
     }
     return typeDef;
+}
+
+export function requireTypeAlias(schema: SchemaDef, alias: string) {
+    const typeAlias = getTypeAlias(schema, alias);
+    if (!typeAlias) {
+        throw createInternalError(`Type alias "${typeAlias}" not found in schema`, typeAlias);
+    }
+    return typeAlias;
 }
 
 export function getField(schema: SchemaDef, model: string, field: string) {

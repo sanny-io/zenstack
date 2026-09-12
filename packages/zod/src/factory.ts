@@ -6,8 +6,10 @@ import {
     type GetEnum,
     type GetEnums,
     type GetModels,
+    type GetTypeAliases,
     type GetTypeDefs,
     type SchemaDef,
+    type TypeAliasDef,
 } from '@zenstackhq/schema';
 import Decimal from 'decimal.js';
 import z from 'zod';
@@ -18,6 +20,7 @@ import type {
     GetModelSchemaShapeWithOptions,
     GetModelUpdateFieldsShape,
     GetTypeDefFieldsShape,
+    MapTypeAliasToZod,
     ModelSchemaOptions,
 } from './types';
 import {
@@ -361,19 +364,26 @@ class SchemaFactory<Schema extends SchemaDef> {
         return z.lazy(() => this.makeModelSchema(relatedModelName));
     }
 
-    private makeScalarFieldSchema(fieldDef: FieldDef): z.ZodType {
-        const { type, attributes } = fieldDef;
+    private makeScalarFieldSchema(def: FieldDef | TypeAliasDef): z.ZodType {
+        const { type } = def;
+        let attributes: readonly AttributeApplication[] | undefined;
+
+        if ('this' in def) {
+            attributes = def.this.attributes;
+        } else {
+            attributes = def.attributes;
+        }
 
         // enum
         const enumDef = this.schema.getEnum(type);
         if (enumDef) {
-            return this.applyCardinality(this.makeEnumSchema(type as GetEnums<Schema>), fieldDef);
+            return this.applyCardinality(this.makeEnumSchema(type as GetEnums<Schema>), def);
         }
 
         // typedef
         const typedefDef = this.schema.getTypeDef(type);
         if (typedefDef) {
-            return this.applyCardinality(this.makeTypeSchema(type as GetTypeDefs<Schema>), fieldDef);
+            return this.applyCardinality(this.makeTypeSchema(type as GetTypeDefs<Schema>), def);
         }
 
         let base: z.ZodType;
@@ -418,7 +428,7 @@ class SchemaFactory<Schema extends SchemaDef> {
             }
         }
 
-        return this.applyCardinality(base, fieldDef);
+        return this.applyCardinality(base, def);
     }
 
     private makeJsonSchema(): z.ZodType {
@@ -447,12 +457,12 @@ class SchemaFactory<Schema extends SchemaDef> {
         return optional;
     }
 
-    private applyCardinality(schema: z.ZodType, fieldDef: FieldDef): z.ZodType {
+    private applyCardinality(schema: z.ZodType, def: FieldDef | TypeAliasDef): z.ZodType {
         let result = schema;
-        if (fieldDef.array) {
+        if ('array' in def && def.array) {
             result = result.array();
         }
-        if (fieldDef.optional) {
+        if ('optional' in def && def.optional) {
             result = result.nullable().optional();
         }
         return result;
@@ -473,6 +483,16 @@ class SchemaFactory<Schema extends SchemaDef> {
             addCustomValidation(shape, typeDef.attributes),
             typeDef.attributes,
         ) as unknown as z.ZodObject<GetTypeDefFieldsShape<Schema, Type>, z.core.$strict>;
+    }
+
+    makeTypeAliasSchema<TypeAlias extends GetTypeAliases<Schema>>(
+        alias: TypeAlias,
+    ): MapTypeAliasToZod<Schema, TypeAlias> {
+        const typeAlias = this.schema.requireTypeAlias(alias);
+        return this.applyDescription(
+            addCustomValidation(this.makeScalarFieldSchema(typeAlias), typeAlias.attributes),
+            typeAlias.attributes,
+        ) as unknown as MapTypeAliasToZod<Schema, TypeAlias>;
     }
 
     makeEnumSchema<Enum extends GetEnums<Schema>>(

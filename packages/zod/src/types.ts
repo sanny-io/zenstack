@@ -9,6 +9,8 @@ import type {
     GetModelFields,
     GetModelFieldType,
     GetModels,
+    GetTypeAliases,
+    GetTypeAliasType,
     GetTypeDefFields,
     GetTypeDefFieldType,
     GetTypeDefs,
@@ -112,6 +114,11 @@ type FieldTypeZodMap = {
     Bytes: z.ZodType<Uint8Array, Uint8Array>;
     Json: JsonZodType;
 };
+
+export type MapTypeAliasToZod<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> =
+    GetTypeAliasType<Schema, TypeAlias> extends keyof FieldTypeZodMap
+        ? FieldTypeZodMap[GetTypeAliasType<Schema, TypeAlias>]
+        : never;
 
 type MapModelFieldToZod<
     Schema extends SchemaDef,

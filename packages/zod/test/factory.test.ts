@@ -33,6 +33,7 @@ describe.each([
         status: 'ACTIVE',
         address: null,
         extId: null,
+        contacts: [],
     };
 
     // A fully valid Post object (without relations)
@@ -1570,6 +1571,36 @@ describe.each([
                 expect(schema.safeParse({ email: 'valid@example.com', age: 16 }).success).toBe(false);
                 expect(schema.safeParse({ email: 'valid@example.com', age: 18 }).success).toBe(true);
             });
+        });
+    });
+
+    describe('type alias', () => {
+        it('attributes work', () => {
+            const postSchema = factory.makeModelSchema('Post');
+            const result = postSchema.safeParse({ ...validPost, tags: ['LOWERCASED'] });
+            expect(result.success).toBe(true);
+            expect(result.data?.tags).toMatchObject(['lowercased']);
+        });
+
+        it('test', () => {
+            const postTagSchema = factory.makeTypeAliasSchema('PostTag');
+            const result = postTagSchema.safeParse('LOWERCASE');
+            expect(result.success).toBe(true);
+            expect(result.data).toBe('lowercase');
+        });
+
+        it('test 3', () => {
+            const contactSchema = factory.makeTypeAliasSchema('Contact');
+            let result = contactSchema.safeParse('test@mail.com');
+            expect(result.success).toBe(true);
+            expect(result.data).toBe('test@mail.com');
+
+            result = contactSchema.safeParse('+15555555555');
+            expect(result.success).toBe(true);
+            expect(result.data).toBe('+15555555555');
+
+            result = contactSchema.safeParse('123');
+            expect(result.success).toBe(false);
         });
     });
 });

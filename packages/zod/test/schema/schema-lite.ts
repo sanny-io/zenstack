@@ -118,6 +118,12 @@ export class SchemaType implements SchemaDef {
                     type: "Post",
                     array: true,
                     relation: { opposite: "author" }
+                },
+                contacts: {
+                    name: "contacts",
+                    type: "String",
+                    aliasedFrom: "Contact",
+                    array: true
                 }
             },
             attributes: [
@@ -150,7 +156,9 @@ export class SchemaType implements SchemaDef {
                 tags: {
                     name: "tags",
                     type: "String",
-                    array: true
+                    aliasedFrom: "PostTag",
+                    array: true,
+                    attributes: [{ name: "@lower" }] as readonly AttributeApplication[]
                 },
                 author: {
                     name: "author",
@@ -342,6 +350,25 @@ export class SchemaType implements SchemaDef {
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.binary(ExpressionUtils.field("zip"), "==", ExpressionUtils._null()), "||", ExpressionUtils.binary(ExpressionUtils.call("length", [ExpressionUtils.field("zip")]), "==", ExpressionUtils.literal(5))) }, { name: "message", value: ExpressionUtils.literal("Zip code must be exactly 5 characters") }, { name: "path", value: ExpressionUtils.array("String", [ExpressionUtils.literal("zip")]) }] },
                 { name: "@@meta", args: [{ name: "name", value: ExpressionUtils.literal("description") }, { name: "value", value: ExpressionUtils.literal("A mailing address") }] }
             ] as readonly AttributeApplication[]
+        }
+    } as const;
+    typeAliases = {
+        Contact: {
+            name: "Contact",
+            type: "String",
+            this: {},
+            attributes: [
+                { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.call("isPhone", [ExpressionUtils._this()]), "||", ExpressionUtils.call("isEmail", [ExpressionUtils._this()])) }] }
+            ] as readonly AttributeApplication[]
+        },
+        PostTag: {
+            name: "PostTag",
+            type: "String",
+            this: {
+                attributes: [
+                    { name: "@lower" }
+                ] as readonly AttributeApplication[]
+            }
         }
     } as const;
     enums = {

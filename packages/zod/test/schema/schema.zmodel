@@ -41,18 +41,29 @@ model User {
     status    Status
     address   Address?  @json
     posts     Post[]
+    contacts  Contact[]
 
     @@validate(age >= 18, "Must be adult", ["age"])
     @@meta("description", "A user of the system")
+}
+
+type Contact extends String {
+    this String
+
+    @@validate(isPhone(this) || isEmail(this))
 }
 
 model Post {
     id        String   @id @default(cuid())
     title     String
     published Boolean
-    tags      String[]
+    tags      PostTag[]
     author    User?    @relation(fields: [authorId], references: [id])
     authorId  String?
+}
+
+type PostTag extends String {
+    this String @lower
 }
 
 // --- Computed fields ---
