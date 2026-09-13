@@ -903,7 +903,9 @@ type Profile with Strict {
                 id   Int   @id
             }
 
-            type UserName = String
+            type UserName extends String {
+                this String
+            }
             `);
 
         console.log({ schema });
@@ -916,7 +918,9 @@ type Profile with Strict {
                 name UserName
             }
 
-            type UserName = String @length(2, 16)
+            type UserName extends String {
+                this String @length(2, 16)
+            }
             `);
 
         console.log({ schema });
@@ -929,7 +933,9 @@ type Profile with Strict {
                 name UserName @startsWith('user_')
             }
 
-            type UserName = String @length(1, 5)
+            type UserName extends String {
+                this String @length(1, 5)
+            }
             `);
 
         console.log({ schema });
@@ -942,7 +948,9 @@ type Profile with Strict {
                 id   String @id
             }
 
-            type UserId = String @id
+            type UserId extends String {
+                this String
+            }
             `);
 
         console.log({ schema });
@@ -955,7 +963,9 @@ type Profile with Strict {
                 id   String @id
             }
 
-            type UserId = Int @lt(5)
+            type UserId extends Int {
+                this Int @lt(5)
+            }
             `);
 
         console.log({ schema });
@@ -967,7 +977,9 @@ type Profile with Strict {
                 id UserId @id @test
             }
 
-            type UserId = String
+            type UserId extends String {
+                this String
+            }
 
             attribute @test() @@@once @@@validation
             `);

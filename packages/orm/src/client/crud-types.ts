@@ -17,6 +17,8 @@ import type {
     GetModelFieldType,
     GetModels,
     GetSubModels,
+    GetTypeAliases,
+    GetTypeAliasType,
     GetTypeDefField,
     GetTypeDefFields,
     GetTypeDefFieldType,
@@ -2994,7 +2996,9 @@ type MapType<Schema extends SchemaDef, T extends string> = T extends keyof TypeM
         ? TypeDefResult<Schema, T>
         : T extends GetEnums<Schema>
           ? EnumValue<Schema, T>
-          : unknown;
+          : T extends GetTypeAliases<Schema>
+            ? GetTypeAliasType<Schema, T>
+            : unknown;
 
 type ProviderSupportsDistinct<Schema extends SchemaDef> = Schema['provider']['type'] extends 'postgresql'
     ? true

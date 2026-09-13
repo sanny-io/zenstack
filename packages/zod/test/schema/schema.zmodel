@@ -28,7 +28,7 @@ model User {
     website   String?   @url
     code      String    @startsWith("USR")
     age       Int       @gt(0) @lte(150)
-    score     Float     @gte(0.0) @lt(100.0)
+    score     Score
     bigNum    BigInt    @gte(0)
     balance   Decimal   @gt(0)
     active    Boolean
@@ -47,18 +47,26 @@ model User {
     @@meta("description", "A user of the system")
 }
 
+type Score extends Float {
+    this Float
+
+    @@validate(this >= 0.0)
+    @@validate(this < 100.0)
+}
+
 type Contact extends String {
     this String
 
     @@validate(isPhone(this) || isEmail(this))
+
 }
 
 model Post {
-    id        String   @id @default(cuid())
+    id        String    @id @default(cuid())
     title     String
     published Boolean
     tags      PostTag[]
-    author    User?    @relation(fields: [authorId], references: [id])
+    author    User?     @relation(fields: [authorId], references: [id])
     authorId  String?
 }
 

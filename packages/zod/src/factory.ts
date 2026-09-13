@@ -2,6 +2,7 @@ import {
     ExpressionUtils,
     SchemaAccessor,
     type AttributeApplication,
+    type BuiltinType,
     type FieldDef,
     type GetEnum,
     type GetEnums,
@@ -364,16 +365,53 @@ class SchemaFactory<Schema extends SchemaDef> {
         return z.lazy(() => this.makeModelSchema(relatedModelName));
     }
 
-    private makeScalarFieldSchema(def: FieldDef | TypeAliasDef): z.ZodType {
-        const { type } = def;
-        let attributes: readonly AttributeApplication[] | undefined;
-
-        if ('this' in def) {
-            attributes = def.this.attributes;
-        } else {
-            attributes = def.attributes;
+    private makeScalarSchema(type: BuiltinType, attributes: readonly AttributeApplication[] | undefined): z.ZodType {
+        let schema: z.ZodType;
+        switch (type) {
+            case 'String':
+                schema = addStringValidation(z.string(), attributes);
+                break;
+            case 'Int':
+                schema = addNumberValidation(z.number().int(), attributes);
+                break;
+            case 'Float':
+                schema = addNumberValidation(z.number(), attributes);
+                break;
+            case 'Boolean':
+                schema = z.boolean();
+                break;
+            case 'BigInt':
+                schema = addBigIntValidation(z.bigint(), attributes);
+                break;
+            case 'Decimal':
+                schema = z.union([
+                    addNumberValidation(z.number(), attributes) as z.ZodNumber,
+                    addDecimalValidation(z.string(), attributes, true) as z.ZodString,
+                    addDecimalValidation(z.instanceof(Decimal), attributes, true),
+                ]);
+                break;
+            case 'DateTime':
+                schema = z.union([z.date(), z.iso.datetime()]);
+                break;
+            case 'Bytes':
+                schema = z.instanceof(Uint8Array);
+                break;
+            case 'Json':
+                schema = this.makeJsonSchema();
+                break;
+            case 'Unsupported':
+                schema = z.unknown();
+                break;
+            default: {
+                const _exhaustive: never = type as never;
+                throw new SchemaFactoryError(`Unsupported field type: ${_exhaustive}`);
+            }
         }
+        return schema;
+    }
 
+    private makeScalarFieldSchema(def: FieldDef): z.ZodType {
+        const { type, attributes } = def;
         // enum
         const enumDef = this.schema.getEnum(type);
         if (enumDef) {
@@ -386,49 +424,15 @@ class SchemaFactory<Schema extends SchemaDef> {
             return this.applyCardinality(this.makeTypeSchema(type as GetTypeDefs<Schema>), def);
         }
 
-        let base: z.ZodType;
-        switch (type) {
-            case 'String':
-                base = addStringValidation(z.string(), attributes);
-                break;
-            case 'Int':
-                base = addNumberValidation(z.number().int(), attributes);
-                break;
-            case 'Float':
-                base = addNumberValidation(z.number(), attributes);
-                break;
-            case 'Boolean':
-                base = z.boolean();
-                break;
-            case 'BigInt':
-                base = addBigIntValidation(z.bigint(), attributes);
-                break;
-            case 'Decimal':
-                base = z.union([
-                    addNumberValidation(z.number(), attributes) as z.ZodNumber,
-                    addDecimalValidation(z.string(), attributes, true) as z.ZodString,
-                    addDecimalValidation(z.instanceof(Decimal), attributes, true),
-                ]);
-                break;
-            case 'DateTime':
-                base = z.union([z.date(), z.iso.datetime()]);
-                break;
-            case 'Bytes':
-                base = z.instanceof(Uint8Array);
-                break;
-            case 'Json':
-                base = this.makeJsonSchema();
-                break;
-            case 'Unsupported':
-                base = z.unknown();
-                break;
-            default: {
-                const _exhaustive: never = type as never;
-                throw new SchemaFactoryError(`Unsupported field type: ${_exhaustive}`);
-            }
+        const typeAliasDef = this.schema.getTypeAlias(type);
+        if (typeAliasDef) {
+            return this.applyCardinality(
+                addCustomValidation(this.makeScalarSchema(typeAliasDef.type, def.attributes), typeAliasDef.attributes),
+                def,
+            );
         }
 
-        return this.applyCardinality(base, def);
+        return this.applyCardinality(this.makeScalarSchema(type as BuiltinType, attributes), def);
     }
 
     private makeJsonSchema(): z.ZodType {
@@ -489,8 +493,8 @@ class SchemaFactory<Schema extends SchemaDef> {
         alias: TypeAlias,
     ): MapTypeAliasToZod<Schema, TypeAlias> {
         const typeAlias = this.schema.requireTypeAlias(alias);
-        return this.applyDescription(
-            addCustomValidation(this.makeScalarFieldSchema(typeAlias), typeAlias.attributes),
+        return addCustomValidation(
+            this.makeScalarSchema(typeAlias.type, typeAlias.this?.attributes),
             typeAlias.attributes,
         ) as unknown as MapTypeAliasToZod<Schema, TypeAlias>;
     }

@@ -311,6 +311,10 @@ export function isTypeDef(schema: SchemaDef, type: string) {
     return !!schema.typeDefs?.[type];
 }
 
+export function isTypeAlias(schema: SchemaDef, type: string) {
+    return !!schema.typeAliases?.[type];
+}
+
 export function buildJoinPairs(
     schema: SchemaDef,
     model: string,

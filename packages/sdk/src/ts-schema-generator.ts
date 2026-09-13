@@ -581,7 +581,10 @@ export class TsSchemaGenerator {
             // name
             ts.factory.createPropertyAssignment('name', ts.factory.createStringLiteral(ta.name)),
             ts.factory.createPropertyAssignment('type', ts.factory.createStringLiteral(ta.type)),
-            ts.factory.createPropertyAssignment('this', this.createTypeAliasThisObject(ta.this)),
+
+            ...(ta.this.attributes.length > 0
+                ? [ts.factory.createPropertyAssignment('this', this.createTypeAliasThisObject(ta.this))]
+                : []),
 
             // attributes
             ...(allAttributes.length > 0
@@ -671,15 +674,6 @@ export class TsSchemaGenerator {
             // type
             ts.factory.createPropertyAssignment('type', this.generateFieldTypeLiteral(field)),
         ];
-
-        if (isTypeAlias(field.type.reference?.ref)) {
-            objectFields.push(
-                ts.factory.createPropertyAssignment(
-                    'aliasedFrom',
-                    ts.factory.createStringLiteral(field.type.reference.ref.name),
-                ),
-            );
-        }
 
         if (contextModel && ModelUtils.isIdField(field, contextModel)) {
             objectFields.push(ts.factory.createPropertyAssignment('id', ts.factory.createTrue()));
@@ -1177,11 +1171,8 @@ export class TsSchemaGenerator {
         return field.type.type
             ? ts.factory.createStringLiteral(field.type.type)
             : field.type.reference
-              ? isTypeAlias(field.type.reference.ref)
-                  ? ts.factory.createStringLiteral(field.type.reference.ref.type)
-                  : ts.factory.createStringLiteral(field.type.reference.$refText)
-              : // `Unsupported` type
-                ts.factory.createStringLiteral('Unsupported');
+              ? ts.factory.createStringLiteral(field.type.reference.$refText)
+              : ts.factory.createStringLiteral('Unsupported');
     }
 
     private createEnumObject(e: Enum) {

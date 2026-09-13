@@ -48,6 +48,7 @@ import {
     getTypeDef,
     getUniqueFields,
     isEnum,
+    isTypeAlias,
     isTypeDef,
     requireField,
     requireModel,
@@ -1679,7 +1680,7 @@ export class ZodSchemaFactory<
                 let fieldSchema = this.makeScalarSchema(fieldDef.type, fieldDef.attributes);
 
                 if (fieldDef.array) {
-                    fieldSchema = fieldDef.aliasedFrom
+                    fieldSchema = isTypeAlias(this.schema, fieldDef.type)
                         ? fieldSchema.array()
                         : ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
                     fieldSchema = z
@@ -2058,7 +2059,7 @@ export class ZodSchemaFactory<
                 }
 
                 if (fieldDef.array) {
-                    const arraySchema = fieldDef.aliasedFrom
+                    const arraySchema = isTypeAlias(this.schema, fieldDef.type)
                         ? fieldSchema.array()
                         : ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
                     fieldSchema = z.union([

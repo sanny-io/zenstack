@@ -58,6 +58,11 @@ type Accessors = {
     requireTypeDef(name: string): TypeDefDef;
 
     /**
+     * Gets a type alias definition by name. Returns `undefined` if the type alias definition is not found.
+     */
+    getTypeAlias(name: string): TypeAliasDef | undefined;
+
+    /**
      * Gets a type alias definition by name. Throws an error if the type definition is not found.
      */
     requireTypeAlias(name: string): TypeAliasDef;
@@ -163,6 +168,10 @@ const accessors: Accessors = {
         const typeDef = this.schema.typeDefs?.[name];
         if (!typeDef) throw new InvalidSchemaError(`TypeDef "${name}" not found in schema`);
         return typeDef;
+    },
+
+    getTypeAlias(this: { schema: SchemaDef }, name: string) {
+        return this.schema.typeAliases?.[name];
     },
 
     requireTypeAlias(this: { schema: SchemaDef }, name: string) {

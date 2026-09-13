@@ -67,73 +67,22 @@ describe('Type alias tests', () => {
                 }
 
                 model User {
-                    id   String   @id
-                    name UserName @default('')
-                }
-
-                type UserName = String @default('')
-            `,
-            'can only be applied once',
-        );
-
-        await loadSchemaWithError(
-            `
-                datasource db {
-                    provider = 'sqlite'
-                    url      = 'file:./dev.db'
-                }
-
-                model User {
                     id    String @id
                     name  UserName
                     name2 UserName
                 }
 
-                type UserName = String @onlyOnce
+                type UserName extends String {
+                    this String @onlyOnce
+                }
 
-                attribute @onlyOnce() @@@targetField([StringField]) @@@onceInModel
+                attribute @onlyOnce() @@@targetField([StringField]) @@@onceInModel @@@validation
             `,
             'can only be applied to one field per model',
         );
     });
 
-    it('rejects invalid attribute applications', async () => {
-        await loadSchemaWithError(
-            `
-                datasource db {
-                    provider = 'sqlite'
-                    url      = 'file:./dev.db'
-                }
-
-                model User {
-                    id   String   @id
-                    test Test
-                }
-
-                type Test = String @unique
-            `,
-            'cannot be used on this type of field',
-        );
-
-        await loadSchemaWithError(
-            `
-                datasource db {
-                    provider = 'sqlite'
-                    url      = 'file:./dev.db'
-                }
-
-                model User {
-                    id   String   @id
-                    test Test
-                }
-
-                type Test = String @db.Text
-            `,
-            'cannot be used on this type of field',
-        );
-    });
-
-    it('testt', async () => {
+    it('resolves `this` to the base type', async () => {
         await loadSchema(`
                 datasource db {
                     provider = 'sqlite'
@@ -153,8 +102,9 @@ describe('Type alias tests', () => {
             `);
     });
 
-    it('testt 222', async () => {
-        await loadSchema(`
+    it('rejects invalid attributes', async () => {
+        await loadSchemaWithError(
+            `
                 datasource db {
                     provider = 'postgresql'
                     url      = 'file:./dev.db'
@@ -168,10 +118,31 @@ describe('Type alias tests', () => {
                 type Email extends String {
                     this String @db.Text
                 }
-            `);
+            `,
+            'attribute "@db.Text" cannot be used with type aliases',
+        );
+
+        await loadSchemaWithError(
+            `
+                datasource db {
+                    provider = 'postgresql'
+                    url      = 'file:./dev.db'
+                }
+
+                model User {
+                    id    String @id
+                    email Email @gt(5)
+                }
+
+                type Email extends String {
+                    this String
+                }
+            `,
+            'cannot be used on this type of field',
+        );
     });
 
-    it('testt 222234', async () => {
+    it('accepts attributes on the field declaration', async () => {
         await loadSchema(`
                 datasource db {
                     provider = 'postgresql'
@@ -180,11 +151,29 @@ describe('Type alias tests', () => {
 
                 model User {
                     id    String @id
-                    email Email @length(1, 2)
+                    email Email @length(1, 2) @db.Text
                 }
 
                 type Email extends String {
                     this String
+                }
+            `);
+    });
+
+    it('accepts attributes on the `this` declaration', async () => {
+        await loadSchema(`
+                datasource db {
+                    provider = 'postgresql'
+                    url      = 'file:./dev.db'
+                }
+
+                model User {
+                    id    String @id
+                    email Email
+                }
+
+                type Email extends String {
+                    this String @email
                 }
             `);
     });

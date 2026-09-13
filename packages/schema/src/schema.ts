@@ -69,7 +69,6 @@ export type FieldDefault = MappedBuiltinType | Expression | readonly unknown[];
 export type FieldDef = {
     name: string;
     type: string;
-    aliasedFrom?: string;
     id?: boolean;
     array?: boolean;
     optional?: boolean;
@@ -139,7 +138,7 @@ export type TypeAliasDef = {
     name: string;
     type: BuiltinType;
     attributes?: readonly AttributeApplication[];
-    this: {
+    this?: {
         attributes?: readonly AttributeApplication[];
     };
 };

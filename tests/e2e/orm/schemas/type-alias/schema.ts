@@ -23,21 +23,18 @@ export class SchemaType implements SchemaDef {
                 },
                 name: {
                     name: "name",
-                    type: "String",
-                    aliasedFrom: "UserName",
+                    type: "UserName",
                     attributes: [{ name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(2) }, { name: "max", value: ExpressionUtils.literal(16) }] }] as readonly AttributeApplication[]
                 },
                 contacts: {
                     name: "contacts",
-                    type: "String",
-                    aliasedFrom: "Contact",
+                    type: "Contact",
                     array: true,
                     attributes: [{ name: "@phone" }] as readonly AttributeApplication[]
                 },
                 age: {
                     name: "age",
-                    type: "Int",
-                    aliasedFrom: "Age",
+                    type: "Age",
                     optional: true,
                     attributes: [{ name: "@default", args: [{ name: "value", value: ExpressionUtils.literal(18) }] }, { name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(18) }] }] as readonly AttributeApplication[],
                     default: "18" as FieldDefault
@@ -52,15 +49,30 @@ export class SchemaType implements SchemaDef {
     typeAliases = {
         UserName: {
             name: "UserName",
-            type: "String"
+            type: "String",
+            this: {
+                attributes: [
+                    { name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(2) }, { name: "max", value: ExpressionUtils.literal(16) }] }
+                ] as readonly AttributeApplication[]
+            }
         },
         Contact: {
             name: "Contact",
-            type: "String"
+            type: "String",
+            this: {
+                attributes: [
+                    { name: "@phone" }
+                ] as readonly AttributeApplication[]
+            }
         },
         Age: {
             name: "Age",
-            type: "Int"
+            type: "Int",
+            this: {
+                attributes: [
+                    { name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(18) }] }
+                ] as readonly AttributeApplication[]
+            }
         }
     } as const;
     authType = "User" as const;

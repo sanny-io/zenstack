@@ -54,8 +54,7 @@ export class SchemaType implements SchemaDef {
                 },
                 score: {
                     name: "score",
-                    type: "Float",
-                    attributes: [{ name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(0.0) }] }, { name: "@lt", args: [{ name: "value", value: ExpressionUtils.literal(100.0) }] }] as readonly AttributeApplication[]
+                    type: "Score"
                 },
                 bigNum: {
                     name: "bigNum",
@@ -121,8 +120,7 @@ export class SchemaType implements SchemaDef {
                 },
                 contacts: {
                     name: "contacts",
-                    type: "String",
-                    aliasedFrom: "Contact",
+                    type: "Contact",
                     array: true
                 }
             },
@@ -155,8 +153,7 @@ export class SchemaType implements SchemaDef {
                 },
                 tags: {
                     name: "tags",
-                    type: "String",
-                    aliasedFrom: "PostTag",
+                    type: "PostTag",
                     array: true,
                     attributes: [{ name: "@lower" }] as readonly AttributeApplication[]
                 },
@@ -353,10 +350,17 @@ export class SchemaType implements SchemaDef {
         }
     } as const;
     typeAliases = {
+        Score: {
+            name: "Score",
+            type: "Float",
+            attributes: [
+                { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils._this(), ">=", ExpressionUtils.literal(0.0)) }] },
+                { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils._this(), "<", ExpressionUtils.literal(100.0)) }] }
+            ] as readonly AttributeApplication[]
+        },
         Contact: {
             name: "Contact",
             type: "String",
-            this: {},
             attributes: [
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.call("isPhone", [ExpressionUtils._this()]), "||", ExpressionUtils.call("isEmail", [ExpressionUtils._this()])) }] }
             ] as readonly AttributeApplication[]
