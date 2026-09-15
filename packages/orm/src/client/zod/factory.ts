@@ -48,7 +48,7 @@ import {
     getTypeDef,
     getUniqueFields,
     isEnum,
-    isTypeAlias,
+    isPrimitiveTypeDef,
     isTypeDef,
     requireField,
     requireModel,
@@ -463,6 +463,9 @@ export class ZodSchemaFactory<
     private makeTypeDefSchema(type: string): ZodType {
         const typeDef = getTypeDef(this.schema, type);
         invariant(typeDef, `Type definition "${type}" not found in schema`);
+        if (typeDef.base) {
+            return;
+        }
         const func = typeDef.strict ? z.strictObject : z.looseObject;
         const schema = func(
             Object.fromEntries(
@@ -1680,7 +1683,7 @@ export class ZodSchemaFactory<
                 let fieldSchema = this.makeScalarSchema(fieldDef.type, fieldDef.attributes);
 
                 if (fieldDef.array) {
-                    fieldSchema = isTypeAlias(this.schema, fieldDef.type)
+                    fieldSchema = isPrimitiveTypeDef(this.schema, fieldDef.type)
                         ? fieldSchema.array()
                         : ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
                     fieldSchema = z
@@ -2059,7 +2062,7 @@ export class ZodSchemaFactory<
                 }
 
                 if (fieldDef.array) {
-                    const arraySchema = isTypeAlias(this.schema, fieldDef.type)
+                    const arraySchema = isPrimitiveTypeDef(this.schema, fieldDef.type)
                         ? fieldSchema.array()
                         : ZodUtils.addListValidation(fieldSchema.array(), fieldDef.attributes);
                     fieldSchema = z.union([

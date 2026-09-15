@@ -320,27 +320,36 @@ export type TypeDefResult<
     Schema extends SchemaDef,
     TypeDef extends GetTypeDefs<Schema>,
     Partial extends boolean = false,
-> = PartialIf<
-    Optional<
-        {
-            [Key in GetTypeDefFields<Schema, TypeDef>]: MapFieldDefType<
-                Schema,
-                GetTypeDefField<Schema, TypeDef, Key>,
-                Partial
-            >;
-        },
-        // optionality
-        Partial extends true
-            ? never
-            : keyof {
-                  [Key in GetTypeDefFields<Schema, TypeDef> as TypeDefFieldIsOptional<Schema, TypeDef, Key> extends true
-                      ? Key
-                      : never]: true;
-              }
-    >,
-    Partial
-> &
-    (IsTypeDefStrict<Schema, TypeDef> extends true ? {} : Record<string, unknown>);
+> =
+    Schema['typeDefs'] extends Record<string, unknown>
+        ? Schema['typeDefs'][TypeDef]['base'] extends string
+            ? TypeMap[Schema['typeDefs'][TypeDef]['base']]
+            : PartialIf<
+                  Optional<
+                      {
+                          [Key in GetTypeDefFields<Schema, TypeDef>]: MapFieldDefType<
+                              Schema,
+                              GetTypeDefField<Schema, TypeDef, Key>,
+                              Partial
+                          >;
+                      },
+                      // optionality
+                      Partial extends true
+                          ? never
+                          : keyof {
+                                [Key in GetTypeDefFields<Schema, TypeDef> as TypeDefFieldIsOptional<
+                                    Schema,
+                                    TypeDef,
+                                    Key
+                                > extends true
+                                    ? Key
+                                    : never]: true;
+                            }
+                  >,
+                  Partial
+              > &
+                  (IsTypeDefStrict<Schema, TypeDef> extends true ? {} : Record<string, unknown>)
+        : never;
 
 export type IsTypeDefStrict<Schema extends SchemaDef, TypeDef extends GetTypeDefs<Schema>> =
     Schema['typeDefs'] extends Record<string, unknown>
@@ -350,6 +359,11 @@ export type IsTypeDefStrict<Schema extends SchemaDef, TypeDef extends GetTypeDef
         : never;
 
 export type BatchResult = { count: number };
+
+export type Type<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> = MapType<
+    Schema,
+    GetTypeAliasType<Schema, TypeAlias>
+>;
 
 export type TypeAliasResult<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> = MapType<
     Schema,

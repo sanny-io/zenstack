@@ -2,6 +2,7 @@ import type { ValidationAcceptor } from 'langium';
 import { type DataField, type TypeDef } from '../generated/ast';
 import { validateAttributeApplication } from './attribute-application-validator';
 import { validateDuplicatedDeclarations, type AstValidator } from './common';
+import { getPrimitiveTypeDefThisField } from '../utils';
 
 /**
  * Validates type def declarations.
@@ -11,6 +12,7 @@ export default class TypeDefValidator implements AstValidator<TypeDef> {
         validateDuplicatedDeclarations(typeDef, typeDef.fields, accept);
         this.validateAttributes(typeDef, accept);
         this.validateFields(typeDef, accept);
+        this.validateSingleThisField(typeDef, accept);
     }
 
     private validateAttributes(typeDef: TypeDef, accept: ValidationAcceptor) {
@@ -23,5 +25,36 @@ export default class TypeDefValidator implements AstValidator<TypeDef> {
 
     private validateField(field: DataField, accept: ValidationAcceptor): void {
         field.attributes.forEach((attr) => validateAttributeApplication(attr, accept));
+    }
+
+    private validateSingleThisField(typeDef: TypeDef, accept: ValidationAcceptor) {
+        if (typeDef.base) {
+            if (typeDef.fields.length > 1) {
+                accept('error', 'primitive type def must only declare 1 field', {
+                    node: typeDef,
+                });
+            }
+            const thisField = getPrimitiveTypeDefThisField(typeDef);
+            if (!thisField) {
+                accept('error', 'primitive type def is missing "this" field', {
+                    node: typeDef,
+                });
+            } else if (thisField.type.type !== typeDef.base) {
+                accept('error', 'primitive type def\'s "this" field does not match the declared type', {
+                    node: thisField,
+                });
+            }
+            if (typeDef.mixins.length > 0) {
+                accept('error', `primitive type def cannot use mixins`, {
+                    node: typeDef,
+                });
+            }
+        } else {
+            if (typeDef.mixins.some((m) => !!m.ref?.base)) {
+                accept('error', `type def cannot use primitive type defs as a mixin`, {
+                    node: typeDef,
+                });
+            }
+        }
     }
 }

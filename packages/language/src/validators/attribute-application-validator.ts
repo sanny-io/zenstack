@@ -22,7 +22,6 @@ import {
     isModel,
     isReferenceExpr,
     isStringLiteral,
-    isTypeAlias,
     isTypeAliasThisField,
     isTypeDef,
 } from '../generated/ast';
@@ -42,6 +41,7 @@ import {
     isDataFieldReference,
     isDelegateModel,
     isNativeTypeMappingAttribute,
+    isPrimitiveTypeDef,
     isRelationshipField,
     mapBuiltinTypeToExpressionType,
     resolved,
@@ -145,10 +145,11 @@ export default class AttributeApplicationValidator implements AstValidator<Attri
 
         const targetDecl = attr.$container;
         if (
-            (isTypeAlias(targetDecl) || isTypeAliasThisField(targetDecl)) &&
+            (isPrimitiveTypeDef(targetDecl) || isPrimitiveTypeDef(targetDecl.$container)) &&
             !hasAttribute(attr.decl.ref!, '@@@validation')
         ) {
-            accept('error', `attribute "${decl.name}" cannot be used with type aliases`, { node: attr });
+            accept('error', `attribute "${decl.name}" cannot be used with primitive type definitions`, { node: attr });
+            return;
         }
 
         if (decl.name === '@@@targetField' && !isAttribute(targetDecl)) {
@@ -156,10 +157,7 @@ export default class AttributeApplicationValidator implements AstValidator<Attri
             return;
         }
 
-        if (
-            (isDataField(targetDecl) || isTypeAliasThisField(targetDecl)) &&
-            !isValidAttributeTarget(decl, targetDecl)
-        ) {
+        if (isDataField(targetDecl) && !isValidAttributeTarget(decl, targetDecl)) {
             accept('error', `attribute "${decl.name}" cannot be used on this type of field`, { node: attr });
         }
 
@@ -670,8 +668,11 @@ function assignableToAttributeParam(
             // attribute parameter type is ContextType, need to infer type from
             // the attribute's container
             if (isDataField(attr.$container)) {
-                if (isTypeAlias(attr.$container?.type?.reference?.ref)) {
-                    dstType = attr.$container.type.reference.ref.type;
+                if (
+                    isTypeDef(attr.$container?.type?.reference?.ref) &&
+                    isPrimitiveTypeDef(attr.$container.type.reference.ref)
+                ) {
+                    dstType = attr.$container.type.reference.ref.base!;
                 } else {
                     if (!attr.$container?.type?.type) {
                         return genericError;

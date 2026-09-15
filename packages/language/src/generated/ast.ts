@@ -912,10 +912,10 @@ export function isReferenceTarget(item: unknown): item is ReferenceTarget {
     return reflection.isInstance(item, ReferenceTarget.$type);
 }
 
-export type RegularID = 'abstract' | 'attribute' | 'datasource' | 'enum' | 'import' | 'in' | 'model' | 'plugin' | 'type' | 'view' | string;
+export type RegularID = 'abstract' | 'attribute' | 'datasource' | 'enum' | 'import' | 'in' | 'model' | 'plugin' | 'this' | 'type' | 'view' | string;
 
 export function isRegularID(item: unknown): item is RegularID {
-    return item === 'model' || item === 'enum' || item === 'attribute' || item === 'datasource' || item === 'plugin' || item === 'abstract' || item === 'in' || item === 'view' || item === 'import' || item === 'type' || (typeof item === 'string' && (/[_a-zA-Z][\w_]*/.test(item)));
+    return item === 'model' || item === 'enum' || item === 'attribute' || item === 'datasource' || item === 'plugin' || item === 'abstract' || item === 'in' || item === 'view' || item === 'import' || item === 'type' || item === 'this' || (typeof item === 'string' && (/[_a-zA-Z][\w_]*/.test(item)));
 }
 
 export type RegularIDWithTypeNames = 'Any' | 'BigInt' | 'Boolean' | 'Bytes' | 'DateTime' | 'Decimal' | 'Float' | 'Int' | 'Json' | 'Null' | 'Object' | 'String' | 'Unsupported' | 'Void' | RegularID;
@@ -1010,6 +1010,7 @@ export interface TypeDef extends langium.AstNode {
     readonly $container: Model;
     readonly $type: 'TypeDef';
     attributes: Array<DataModelAttribute>;
+    base?: BuiltinType;
     comments: Array<string>;
     fields: Array<DataField>;
     mixins: Array<langium.Reference<TypeDef>>;
@@ -1019,6 +1020,7 @@ export interface TypeDef extends langium.AstNode {
 export const TypeDef = {
     $type: 'TypeDef',
     attributes: 'attributes',
+    base: 'base',
     comments: 'comments',
     fields: 'fields',
     mixins: 'mixins',
@@ -1848,6 +1850,9 @@ export class ZModelAstReflection extends langium.AbstractAstReflection {
                 attributes: {
                     name: TypeDef.attributes,
                     defaultValue: []
+                },
+                base: {
+                    name: TypeDef.base
                 },
                 comments: {
                     name: TypeDef.comments,

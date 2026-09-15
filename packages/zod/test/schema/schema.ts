@@ -54,7 +54,8 @@ export class SchemaType implements SchemaDef {
                 },
                 score: {
                     name: "score",
-                    type: "Score"
+                    type: "Score",
+                    attributes: [{ name: "@json" }] as readonly AttributeApplication[]
                 },
                 bigNum: {
                     name: "bigNum",
@@ -122,7 +123,8 @@ export class SchemaType implements SchemaDef {
                 contacts: {
                     name: "contacts",
                     type: "Contact",
-                    array: true
+                    array: true,
+                    attributes: [{ name: "@json" }] as readonly AttributeApplication[]
                 }
             },
             attributes: [
@@ -156,7 +158,7 @@ export class SchemaType implements SchemaDef {
                     name: "tags",
                     type: "PostTag",
                     array: true,
-                    attributes: [{ name: "@lower" }] as readonly AttributeApplication[]
+                    attributes: [{ name: "@json" }, { name: "@lower" }] as readonly AttributeApplication[]
                 },
                 author: {
                     name: "author",
@@ -353,12 +355,16 @@ export class SchemaType implements SchemaDef {
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.binary(ExpressionUtils.field("zip"), "==", ExpressionUtils._null()), "||", ExpressionUtils.binary(ExpressionUtils.call("length", [ExpressionUtils.field("zip")]), "==", ExpressionUtils.literal(5))) }, { name: "message", value: ExpressionUtils.literal("Zip code must be exactly 5 characters") }, { name: "path", value: ExpressionUtils.array("String", [ExpressionUtils.literal("zip")]) }] },
                 { name: "@@meta", args: [{ name: "name", value: ExpressionUtils.literal("description") }, { name: "value", value: ExpressionUtils.literal("A mailing address") }] }
             ] as readonly AttributeApplication[]
-        }
-    } as const;
-    typeAliases = {
+        },
         Score: {
             name: "Score",
-            type: "Float",
+            base: "Float",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "Float"
+                }
+            },
             attributes: [
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils._this(), ">=", ExpressionUtils.literal(0.0)) }] },
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils._this(), "<", ExpressionUtils.literal(100.0)) }] }
@@ -366,18 +372,36 @@ export class SchemaType implements SchemaDef {
         },
         Contact: {
             name: "Contact",
-            type: "String",
+            base: "String",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "String"
+                }
+            },
             attributes: [
                 { name: "@@validate", args: [{ name: "value", value: ExpressionUtils.binary(ExpressionUtils.call("isPhone", [ExpressionUtils._this()]), "||", ExpressionUtils.call("isEmail", [ExpressionUtils._this()])) }] }
             ] as readonly AttributeApplication[]
         },
         PostTag: {
             name: "PostTag",
-            type: "String",
-            this: {
-                attributes: [
-                    { name: "@lower" }
-                ] as readonly AttributeApplication[]
+            base: "String",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "String",
+                    attributes: [{ name: "@lower" }] as readonly AttributeApplication[]
+                }
+            }
+        },
+        Test: {
+            name: "Test",
+            base: "String",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "String"
+                }
             }
         }
     } as const;

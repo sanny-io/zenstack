@@ -537,6 +537,9 @@ export class TsSchemaGenerator {
             // name
             ts.factory.createPropertyAssignment('name', ts.factory.createStringLiteral(td.name)),
 
+            // base
+            ...(td.base ? [ts.factory.createPropertyAssignment('base', ts.factory.createStringLiteral(td.base))] : []),
+
             // fields
             ts.factory.createPropertyAssignment(
                 'fields',

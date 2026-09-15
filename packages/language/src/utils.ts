@@ -44,7 +44,6 @@ import {
     type ModelImport,
     type ReferenceExpr,
     type TypeDef,
-    isTypeAlias,
 } from './generated/ast';
 
 export type AttributeTarget =
@@ -202,6 +201,13 @@ export function isNativeTypeMappingAttribute(node: AstNode): node is Attribute {
  */
 export function isLiteAttribute(node: AstNode): node is Attribute {
     return isAttribute(node) && hasAttribute(node, '@@@lite');
+}
+
+/**
+ * Returns if the given node is primitive type def.
+ */
+export function isPrimitiveTypeDef(node: AstNode): node is TypeDef {
+    return isTypeDef(node) && !!node.base;
 }
 
 /**
@@ -694,10 +700,15 @@ export function getAllFields(
 
 export function getAllFieldAttributes(field: DataField) {
     const attributes: DataFieldAttribute[] = [...field.attributes];
-    if (isTypeAlias(field.type?.reference?.ref)) {
-        attributes.push(...field.type.reference.ref.this.attributes);
+    if (isTypeDef(field.type?.reference?.ref) && isPrimitiveTypeDef(field.type.reference.ref)) {
+        const thisField = getPrimitiveTypeDefThisField(field.type.reference.ref);
+        attributes.push(...(thisField?.attributes ?? []));
     }
     return attributes;
+}
+
+export function getPrimitiveTypeDefThisField(td: TypeDef) {
+    return td.fields.find((f) => f.name === 'this');
 }
 
 /**

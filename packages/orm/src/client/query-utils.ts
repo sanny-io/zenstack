@@ -311,6 +311,10 @@ export function isTypeDef(schema: SchemaDef, type: string) {
     return !!schema.typeDefs?.[type];
 }
 
+export function isPrimitiveTypeDef(schema: SchemaDef, type: string) {
+    return !!schema.typeDefs?.[type]?.base;
+}
+
 export function isTypeAlias(schema: SchemaDef, type: string) {
     return !!schema.typeAliases?.[type];
 }

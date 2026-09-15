@@ -20,8 +20,8 @@ import type {
     GetModelFieldsShape,
     GetModelSchemaShapeWithOptions,
     GetModelUpdateFieldsShape,
-    GetTypeDefFieldsShape,
     MapTypeAliasToZod,
+    MapTypeDefToZod,
     ModelSchemaOptions,
 } from './types';
 import {
@@ -472,10 +472,15 @@ class SchemaFactory<Schema extends SchemaDef> {
         return result;
     }
 
-    makeTypeSchema<Type extends GetTypeDefs<Schema>>(
-        type: Type,
-    ): z.ZodObject<GetTypeDefFieldsShape<Schema, Type>, z.core.$strict> {
+    makeTypeSchema<Type extends GetTypeDefs<Schema>>(type: Type): MapTypeDefToZod<Schema, Type> {
         const typeDef = this.schema.requireTypeDef(type);
+        if (typeDef.base) {
+            return addCustomValidation(
+                this.makeScalarSchema(typeDef.base, typeDef.fields['this']?.attributes),
+                typeDef.attributes,
+            ) as unknown as MapTypeDefToZod<Schema, Type>;
+        }
+
         const fields: Record<string, z.ZodType> = {};
 
         for (const [fieldName, fieldDef] of Object.entries(typeDef.fields)) {
@@ -486,7 +491,7 @@ class SchemaFactory<Schema extends SchemaDef> {
         return this.applyDescription(
             addCustomValidation(shape, typeDef.attributes),
             typeDef.attributes,
-        ) as unknown as z.ZodObject<GetTypeDefFieldsShape<Schema, Type>, z.core.$strict>;
+        ) as unknown as MapTypeDefToZod<Schema, Type>;
     }
 
     makeTypeAliasSchema<TypeAlias extends GetTypeAliases<Schema>>(

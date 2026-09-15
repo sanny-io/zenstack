@@ -1599,14 +1599,14 @@ describe.each([
         });
 
         it('supports field validation using `this` attributes', () => {
-            const postTagSchema = factory.makeTypeAliasSchema('PostTag');
+            const postTagSchema = factory.makeTypeSchema('PostTag');
             const result = postTagSchema.safeParse('LOWERCASE');
             expect(result.success).toBe(true);
             expect(result.data).toBe('lowercase');
         });
 
         it('supports `@@validate` attributes', () => {
-            const contactSchema = factory.makeTypeAliasSchema('Contact');
+            const contactSchema = factory.makeTypeSchema('Contact');
             let result = contactSchema.safeParse('test@mail.com');
             expect(result.success).toBe(true);
             expect(result.data).toBe('test@mail.com');
@@ -1620,7 +1620,7 @@ describe.each([
         });
 
         it('supports multiple `@@validate` attributes', () => {
-            const contactSchema = factory.makeTypeAliasSchema('Score');
+            const contactSchema = factory.makeTypeSchema('Score');
             let result = contactSchema.safeParse(0);
             expect(result.success).toBe(true);
             expect(result.data).toBe(0);

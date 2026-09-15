@@ -51,7 +51,7 @@ import {
     isNumberLiteral,
     isReferenceExpr,
     isStringLiteral,
-    isTypeAlias,
+    isTypeDef,
 } from './ast';
 import {
     getAllFields,
@@ -61,6 +61,7 @@ import {
     isAuthInvocation,
     isBeforeInvocation,
     isMemberContainer,
+    isPrimitiveTypeDef,
     mapBuiltinTypeToExpressionType,
 } from './utils';
 
@@ -367,13 +368,13 @@ export class ZModelLinker extends DefaultLinker {
 
         let decl: AstNode | undefined = node.$container;
 
-        while (decl && !isDataModel(decl) && !isTypeAlias(decl)) {
+        while (decl && !isDataModel(decl) && !isPrimitiveTypeDef(decl)) {
             decl = decl.$container;
         }
 
         if (decl) {
-            if (isTypeAlias(decl)) {
-                this.resolveToBuiltinTypeOrDecl(node, decl.type);
+            if (isPrimitiveTypeDef(decl)) {
+                this.resolveToBuiltinTypeOrDecl(node, decl.base!);
             } else {
                 this.resolveToBuiltinTypeOrDecl(node, decl);
             }
@@ -502,9 +503,9 @@ export class ZModelLinker extends DefaultLinker {
                 const contextEnum = node.type.reference.ref as Enum;
                 const enumScope: ScopeProvider = (name) => contextEnum.fields.find((f) => f.name === name);
                 scopes = [enumScope, ...scopes];
-            } else if (isTypeAlias(node.type.reference.ref)) {
+            } else if (isTypeDef(node.type.reference.ref) && isPrimitiveTypeDef(node.type.reference.ref)) {
                 node.$resolvedType = {
-                    decl: node.type.reference.ref.type,
+                    decl: node.type.reference.ref.base,
                     array: node.type.array,
                     nullable: node.type.optional,
                 };
@@ -553,9 +554,9 @@ export class ZModelLinker extends DefaultLinker {
                 array: type.array,
                 nullable: nullable,
             };
-        } else if (isTypeAlias(type.reference?.ref)) {
+        } else if (isTypeDef(type.reference?.ref) && isPrimitiveTypeDef(type.reference.ref)) {
             node.$resolvedType = {
-                decl: type.reference.ref.type,
+                decl: type.reference.ref.base,
                 array: type.array,
                 nullable: nullable,
             };

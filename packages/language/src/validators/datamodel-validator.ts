@@ -540,6 +540,12 @@ export default class DataModelValidator implements AstValidator<DataModel> {
             }
             seen.push(current);
             todo.push(...current.mixins.map((mixin) => mixin.ref!));
+
+            if (current.base) {
+                accept('error', `cannot use primitive type def "${current.name}" as a mixin`, {
+                    node: dm,
+                });
+            }
         }
     }
 
