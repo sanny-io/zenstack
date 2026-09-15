@@ -351,6 +351,11 @@ export type IsTypeDefStrict<Schema extends SchemaDef, TypeDef extends GetTypeDef
 
 export type BatchResult = { count: number };
 
+export type TypeAliasResult<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> = MapType<
+    Schema,
+    GetTypeAliasType<Schema, TypeAlias>
+>;
+
 //#endregion
 
 //#region Common structures

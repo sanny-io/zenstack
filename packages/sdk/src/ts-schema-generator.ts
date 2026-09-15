@@ -1514,6 +1514,15 @@ export class TsSchemaGenerator {
                                   ),
                               ]
                             : []),
+                        ...(model.declarations.some(isTypeAlias)
+                            ? [
+                                  ts.factory.createImportSpecifier(
+                                      false,
+                                      undefined,
+                                      ts.factory.createIdentifier(`TypeAliasResult as $TypeAliasResult`),
+                                  ),
+                              ]
+                            : []),
                     ]),
                 ),
                 ts.factory.createStringLiteral('@zenstackhq/orm'),
@@ -1554,6 +1563,24 @@ export class TsSchemaGenerator {
                 typeDef = this.generateDocs(typeDef, td);
             }
             statements.push(typeDef);
+        }
+
+        // generate: export type TypeAlias = $TypeAliasResult<Schema, 'TypeAlias'>;
+        const typeAliases = this.getAllTypeAliases(model);
+        for (const ta of typeAliases) {
+            let typeAlias = ts.factory.createTypeAliasDeclaration(
+                [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
+                ta.name,
+                undefined,
+                ts.factory.createTypeReferenceNode('$TypeAliasResult', [
+                    ts.factory.createTypeReferenceNode('$Schema'),
+                    ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(ta.name)),
+                ]),
+            );
+            if (ta.comments.length > 0) {
+                typeAlias = this.generateDocs(typeAlias, ta);
+            }
+            statements.push(typeAlias);
         }
 
         // generate: export const Enum = $schema.enums.Enum['values'];
@@ -1665,7 +1692,7 @@ export class TsSchemaGenerator {
 
     private generateDocs<T extends ts.TypeAliasDeclaration | ts.VariableStatement>(
         tsDecl: T,
-        decl: DataModel | TypeDef | Enum,
+        decl: DataModel | TypeDef | Enum | TypeAlias,
     ): T {
         return ts.addSyntheticLeadingComment(
             tsDecl,
