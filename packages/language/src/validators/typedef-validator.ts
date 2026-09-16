@@ -12,7 +12,7 @@ export default class TypeDefValidator implements AstValidator<TypeDef> {
         validateDuplicatedDeclarations(typeDef, typeDef.fields, accept);
         this.validateAttributes(typeDef, accept);
         this.validateFields(typeDef, accept);
-        this.validateSingleThisField(typeDef, accept);
+        this.validatePrimitiveTypeDef(typeDef, accept);
     }
 
     private validateAttributes(typeDef: TypeDef, accept: ValidationAcceptor) {
@@ -27,7 +27,7 @@ export default class TypeDefValidator implements AstValidator<TypeDef> {
         field.attributes.forEach((attr) => validateAttributeApplication(attr, accept));
     }
 
-    private validateSingleThisField(typeDef: TypeDef, accept: ValidationAcceptor) {
+    private validatePrimitiveTypeDef(typeDef: TypeDef, accept: ValidationAcceptor) {
         if (typeDef.base) {
             if (typeDef.fields.length > 1) {
                 accept('error', 'primitive type def must only declare 1 field', {
@@ -39,11 +39,26 @@ export default class TypeDefValidator implements AstValidator<TypeDef> {
                 accept('error', 'primitive type def is missing "this" field', {
                     node: typeDef,
                 });
-            } else if (thisField.type.type !== typeDef.base) {
-                accept('error', 'primitive type def\'s "this" field does not match the declared type', {
-                    node: thisField,
-                });
+            } else {
+                if (thisField.type.type !== typeDef.base) {
+                    accept('error', 'primitive type def\'s "this" field does not match the declared type', {
+                        node: thisField,
+                    });
+                }
+
+                if (thisField.type.array) {
+                    accept('error', 'primitive type def\'s "this" field must be scalar', {
+                        node: thisField,
+                    });
+                }
+
+                if (thisField.type.optional) {
+                    accept('error', 'primitive type def\'s "this" field must not be optional', {
+                        node: thisField,
+                    });
+                }
             }
+
             if (typeDef.mixins.length > 0) {
                 accept('error', `primitive type def cannot use mixins`, {
                     node: typeDef,

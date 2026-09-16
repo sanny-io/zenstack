@@ -148,7 +148,7 @@ export default class AttributeApplicationValidator implements AstValidator<Attri
             (isPrimitiveTypeDef(targetDecl) || isPrimitiveTypeDef(targetDecl.$container)) &&
             !hasAttribute(attr.decl.ref!, '@@@validation')
         ) {
-            accept('error', `attribute "${decl.name}" cannot be used with primitive type definitions`, { node: attr });
+            accept('error', `attribute "${decl.name}" cannot be used with primitive type defs`, { node: attr });
             return;
         }
 
@@ -565,7 +565,8 @@ function assignableToAttributeParam(
             // If the field is JSON, and the attribute is @default, the argument must be a JSON string
             // (design inherited from Prisma)
             const dstIsJson = attr.$container.type.type === 'Json' || hasAttribute(attr.$container, '@json');
-            if (dstIsJson && attr.decl.ref?.name === '@default') {
+            const isInPrimitiveTypeDef = isPrimitiveTypeDef(attr.$container.$container);
+            if (dstIsJson && isInPrimitiveTypeDef && attr.decl.ref?.name === '@default') {
                 if (attr.$container.type.array && attr.$container.type.type === 'Json') {
                     // Json[] default value, must be array of JSON strings
                     if (isArrayExpr(arg.value) && arg.value.items.every((item) => isLiteralJsonString(item))) {
