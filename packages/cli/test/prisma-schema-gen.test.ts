@@ -92,14 +92,14 @@ model User {
         expect(prismaSchemaText.includes('@ds.ByteA')).toBe(true);
     });
 
-    it('renames type aliases to match the base type', async () => {
+    it('renames primitive type defs to match the base type', async () => {
         const model = await loadSchema(`
 model User {
     id   String   @id
     name UserName
 }
 
-type UserName extends String {
+type UserName with String {
     this String
 }
         `);

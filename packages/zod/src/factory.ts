@@ -7,10 +7,8 @@ import {
     type GetEnum,
     type GetEnums,
     type GetModels,
-    type GetTypeAliases,
     type GetTypeDefs,
     type SchemaDef,
-    type TypeAliasDef,
 } from '@zenstackhq/schema';
 import Decimal from 'decimal.js';
 import z from 'zod';
@@ -20,7 +18,6 @@ import type {
     GetModelFieldsShape,
     GetModelSchemaShapeWithOptions,
     GetModelUpdateFieldsShape,
-    MapTypeAliasToZod,
     MapTypeDefToZod,
     ModelSchemaOptions,
 } from './types';
@@ -424,14 +421,6 @@ class SchemaFactory<Schema extends SchemaDef> {
             return this.applyCardinality(this.makeTypeSchema(type as GetTypeDefs<Schema>), def);
         }
 
-        const typeAliasDef = this.schema.getTypeAlias(type);
-        if (typeAliasDef) {
-            return this.applyCardinality(
-                addCustomValidation(this.makeScalarSchema(typeAliasDef.type, def.attributes), typeAliasDef.attributes),
-                def,
-            );
-        }
-
         return this.applyCardinality(this.makeScalarSchema(type as BuiltinType, attributes), def);
     }
 
@@ -461,7 +450,7 @@ class SchemaFactory<Schema extends SchemaDef> {
         return optional;
     }
 
-    private applyCardinality(schema: z.ZodType, def: FieldDef | TypeAliasDef): z.ZodType {
+    private applyCardinality(schema: z.ZodType, def: FieldDef): z.ZodType {
         let result = schema;
         if ('array' in def && def.array) {
             result = result.array();
@@ -492,16 +481,6 @@ class SchemaFactory<Schema extends SchemaDef> {
             addCustomValidation(shape, typeDef.attributes),
             typeDef.attributes,
         ) as unknown as MapTypeDefToZod<Schema, Type>;
-    }
-
-    makeTypeAliasSchema<TypeAlias extends GetTypeAliases<Schema>>(
-        alias: TypeAlias,
-    ): MapTypeAliasToZod<Schema, TypeAlias> {
-        const typeAlias = this.schema.requireTypeAlias(alias);
-        return addCustomValidation(
-            this.makeScalarSchema(typeAlias.type, typeAlias.this?.attributes),
-            typeAlias.attributes,
-        ) as unknown as MapTypeAliasToZod<Schema, TypeAlias>;
     }
 
     makeEnumSchema<Enum extends GetEnums<Schema>>(

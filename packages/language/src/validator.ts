@@ -11,7 +11,6 @@ import type {
     Model,
     Plugin,
     Procedure,
-    TypeAlias,
     TypeDef,
     ZModelAstType,
 } from './generated/ast';
@@ -27,7 +26,6 @@ import FunctionInvocationValidator from './validators/function-invocation-valida
 import ProcedureValidator from './validators/procedure-validator';
 import SchemaValidator from './validators/schema-validator';
 import TypeDefValidator from './validators/typedef-validator';
-import TypeAliasValidator from './validators/type-alias-validator';
 
 /**
  * Register custom validation checks.
@@ -42,7 +40,6 @@ export function registerValidationChecks(services: ZModelServices) {
         GeneratorDecl: validator.checkGenerator,
         DataModel: validator.checkDataModel,
         TypeDef: validator.checkTypeDef,
-        TypeAlias: validator.checkTypeAlias,
         Enum: validator.checkEnum,
         Attribute: validator.checkAttribute,
         Expression: validator.checkExpression,
@@ -77,10 +74,6 @@ export class ZModelValidator {
 
     checkTypeDef(node: TypeDef, accept: ValidationAcceptor): void {
         new TypeDefValidator().validate(node, accept);
-    }
-
-    checkTypeAlias(node: TypeAlias, accept: ValidationAcceptor): void {
-        new TypeAliasValidator().validate(node, accept);
     }
 
     checkEnum(node: Enum, accept: ValidationAcceptor): void {

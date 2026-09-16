@@ -464,7 +464,7 @@ describe('Function Invocation Tests', () => {
     });
 
     describe('length()', () => {
-        it('should accept type aliases of String', async () => {
+        it('should accept primitive type defs of String', async () => {
             await loadSchema(`
                 datasource db {
                     provider = 'sqlite'
@@ -476,7 +476,7 @@ describe('Function Invocation Tests', () => {
                     name UserName
                 }
 
-                type UserName extends String {
+                type UserName with String {
                     this String
 
                     @@validate(length(this) >= 2)

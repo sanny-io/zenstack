@@ -28,7 +28,7 @@ model User {
     website   String?   @url
     code      String    @startsWith("USR")
     age       Int       @gt(0) @lte(150)
-    score     Score     @json
+    score     Score
     bigNum    BigInt    @gte(0)
     balance   Decimal   @gt(0)
     active    Boolean
@@ -41,7 +41,7 @@ model User {
     status    Status
     address   Address?  @json
     posts     Post[]
-    contacts  Contact[] @json
+    contacts  Contact[]
 
     @@validate(age >= 18, "Must be adult", ["age"])
     @@meta("description", "A user of the system")
@@ -64,7 +64,7 @@ model Post {
     id        String    @id @default(cuid())
     title     String
     published Boolean
-    tags      PostTag[] @json
+    tags      PostTag[]
     author    User?     @relation(fields: [authorId], references: [id])
     authorId  String?
 }

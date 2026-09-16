@@ -17,8 +17,6 @@ import type {
     GetModelFieldType,
     GetModels,
     GetSubModels,
-    GetTypeAliases,
-    GetTypeAliasType,
     GetTypeDefField,
     GetTypeDefFields,
     GetTypeDefFieldType,
@@ -34,6 +32,7 @@ import type {
     SchemaDef,
     TypeDefFieldIsArray,
     TypeDefFieldIsOptional,
+    TypeDefIsPrimitive,
     UpdatedAtInfo,
 } from '@zenstackhq/schema';
 import type { ExpressionBuilder, OperandExpression, SqlBool } from 'kysely';
@@ -359,16 +358,6 @@ export type IsTypeDefStrict<Schema extends SchemaDef, TypeDef extends GetTypeDef
         : never;
 
 export type BatchResult = { count: number };
-
-export type Type<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> = MapType<
-    Schema,
-    GetTypeAliasType<Schema, TypeAlias>
->;
-
-export type TypeAliasResult<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> = MapType<
-    Schema,
-    GetTypeAliasType<Schema, TypeAlias>
->;
 
 //#endregion
 
@@ -1506,8 +1495,10 @@ type MapFieldDefType<
     T['type'] extends GetEnums<Schema>
         ? keyof GetEnum<Schema, T['type']>
         : T['type'] extends GetTypeDefs<Schema>
-          ? TypeDefResult<Schema, T['type'], Partial> &
-                (IsTypeDefStrict<Schema, T['type']> extends true ? {} : Record<string, unknown>)
+          ? TypeDefIsPrimitive<Schema, T['type']> extends true
+              ? TypeDefResult<Schema, T['type']>
+              : TypeDefResult<Schema, T['type'], Partial> &
+                    (IsTypeDefStrict<Schema, T['type']> extends true ? {} : Record<string, unknown>)
           : MapBaseType<T['type']>,
     T['optional'],
     T['array']
@@ -3015,9 +3006,7 @@ type MapType<Schema extends SchemaDef, T extends string> = T extends keyof TypeM
         ? TypeDefResult<Schema, T>
         : T extends GetEnums<Schema>
           ? EnumValue<Schema, T>
-          : T extends GetTypeAliases<Schema>
-            ? GetTypeAliasType<Schema, T>
-            : unknown;
+          : unknown;
 
 type ProviderSupportsDistinct<Schema extends SchemaDef> = Schema['provider']['type'] extends 'postgresql'
     ? true

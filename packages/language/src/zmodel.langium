@@ -11,7 +11,7 @@ ModelImport:
     'import' path=STRING  ';'?;
 
 AbstractDeclaration:
-    DataSource | GeneratorDecl| Plugin | DataModel | TypeDef | TypeAlias | Enum | FunctionDecl | Attribute | Procedure;
+    DataSource | GeneratorDecl| Plugin | DataModel | TypeDef  | Enum | FunctionDecl | Attribute | Procedure;
 
 // datasource
 DataSource:
@@ -210,19 +210,6 @@ TypeDef:
         )*
     '}';
 
-TypeAlias:
-    (comments+=TRIPLE_SLASH_COMMENT)*
-    'type' name=RegularID
-    'extends' type=BuiltinType
-    '{' this=TypeAliasThisField (
-            attributes+=DataModelAttribute
-        )*
-    '}';
-
-TypeAliasThisField:
-    (comments+=TRIPLE_SLASH_COMMENT)*
-    'this' type=BuiltinType (attributes+=DataFieldAttribute)*;
-
 UnsupportedFieldType:
     'Unsupported' '(' (value=LiteralExpr) ')';
 
@@ -275,7 +262,7 @@ AttributeParam:
 AttributeParamType:
     (type=(ExpressionType | 'FieldReference' | 'TransitiveFieldReference' | 'ContextType') | reference=[TypeDeclaration:RegularID]) (array?='[' ']')? (optional?='?')?;
 
-type TypeDeclaration = DataModel | TypeDef | Enum | TypeAlias;
+type TypeDeclaration = DataModel | TypeDef | Enum;
 DataFieldAttribute:
     decl=[Attribute:FIELD_ATTRIBUTE_NAME] ('(' AttributeArgList? ')')?;
 

@@ -5,20 +5,20 @@ datasource db {
 
 model User {
     id       String    @id @default(nanoid())
-    name     UserName
+    name     UserName 
     contacts Contact[]
     age      Age?      @default(18)
 }
 
-type UserName extends String {
+type UserName with String {
     this String @length(2, 16)
 }
 
-type Contact extends String {
+type Contact with String {
     this String @phone
 }
 
-type Age extends Int {
+type Age with Int {
     this Int @gte(18)
 }
 

@@ -25,7 +25,6 @@ import {
     isReferenceExpr,
     isStringLiteral,
     isTypeDef,
-    type TypeAlias,
     type Attribute,
     type AttributeParam,
     type BinaryExpr,
@@ -49,7 +48,6 @@ import {
 export type AttributeTarget =
     | DataModel
     | TypeDef
-    | TypeAlias
     | DataField
     | Enum
     | EnumField

@@ -124,7 +124,7 @@ export default class DataModelValidator implements AstValidator<DataModel> {
 
         field.attributes.forEach((attr) => validateAttributeApplication(attr, accept));
 
-        if (isTypeDef(field.type.reference?.ref)) {
+        if (isTypeDef(field.type.reference?.ref) && !field.type.reference.ref.base) {
             if (!hasAttribute(field, '@json')) {
                 accept('error', 'Custom-typed field must have @json attribute', { node: field });
             }

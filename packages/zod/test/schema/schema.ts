@@ -54,8 +54,7 @@ export class SchemaType implements SchemaDef {
                 },
                 score: {
                     name: "score",
-                    type: "Score",
-                    attributes: [{ name: "@json" }] as readonly AttributeApplication[]
+                    type: "Score"
                 },
                 bigNum: {
                     name: "bigNum",
@@ -123,8 +122,7 @@ export class SchemaType implements SchemaDef {
                 contacts: {
                     name: "contacts",
                     type: "Contact",
-                    array: true,
-                    attributes: [{ name: "@json" }] as readonly AttributeApplication[]
+                    array: true
                 }
             },
             attributes: [
@@ -158,7 +156,7 @@ export class SchemaType implements SchemaDef {
                     name: "tags",
                     type: "PostTag",
                     array: true,
-                    attributes: [{ name: "@json" }, { name: "@lower" }] as readonly AttributeApplication[]
+                    attributes: [{ name: "@lower" }] as readonly AttributeApplication[]
                 },
                 author: {
                     name: "author",

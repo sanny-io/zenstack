@@ -896,14 +896,14 @@ type Profile with Strict {
         });
     });
 
-    it('supports type aliases', async () => {
+    it('supports primitive type defs', async () => {
         const { schema } = await generateTsSchema(`
             model User {
                 name UserName
                 id   Int   @id
             }
 
-            type UserName extends String {
+            type UserName with String {
                 this String
             }
             `);
@@ -911,14 +911,14 @@ type Profile with Strict {
         console.log({ schema });
     });
 
-    it('supports type aliases with validation attributes', async () => {
+    it('supports primitive type defs with validation attributes', async () => {
         const { schema } = await generateTsSchema(`
             model User {
                 id   Int   @id
                 name UserName
             }
 
-            type UserName extends String {
+            type UserName with String {
                 this String @length(2, 16)
             }
             `);
@@ -926,14 +926,14 @@ type Profile with Strict {
         console.log({ schema });
     });
 
-    it('allows type aliases to be used with functions', async () => {
+    it('allows primitive type defs to be used with functions', async () => {
         const { schema } = await generateTsSchema(`
             model User {
                 id   Int   @id
                 name UserName @startsWith('user_')
             }
 
-            type UserName extends String {
+            type UserName with String {
                 this String @length(1, 5)
             }
             `);
@@ -941,14 +941,14 @@ type Profile with Strict {
         console.log({ schema });
     });
 
-    it('allows type aliases to be used with default values', async () => {
+    it('allows primitive type defs to be used with default values', async () => {
         const { schema } = await generateTsSchema(`
             model User {
                 name UserId @default('')
                 id   String @id
             }
 
-            type UserId extends String {
+            type UserId with String {
                 this String
             }
             `);
@@ -963,7 +963,7 @@ type Profile with Strict {
                 id   String @id
             }
 
-            type UserId extends Int {
+            type UserId with Int {
                 this Int @lt(5)
             }
             `);
@@ -977,7 +977,7 @@ type Profile with Strict {
                 id UserId @id @test
             }
 
-            type UserId extends String {
+            type UserId with String {
                 this String
             }
 
@@ -994,7 +994,7 @@ type Profile with Strict {
                     email Email
                 }
 
-                type Email extends String {
+                type Email with String {
                     this String
 
                     @@validate(isEmail(this))

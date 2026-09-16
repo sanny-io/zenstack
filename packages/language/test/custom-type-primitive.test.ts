@@ -1,8 +1,8 @@
 import { describe, it } from 'vitest';
 import { loadSchema, loadSchemaWithError } from './utils';
 
-describe('Type alias tests', () => {
-    it('supports type aliases', async () => {
+describe('Custom type primitive tests', () => {
+    it('supports custom type primitives', async () => {
         await loadSchema(`
                 datasource db {
                     provider = 'sqlite'
@@ -14,13 +14,13 @@ describe('Type alias tests', () => {
                     name UserName
                 }
 
-                type UserName extends String {
+                type UserName with String {
                     this String
                 }
             `);
     });
 
-    it('supports type aliases in validation', async () => {
+    it('supports custom type primitives in validation', async () => {
         await loadSchema(`
                 datasource db {
                     provider = 'sqlite'
@@ -34,13 +34,13 @@ describe('Type alias tests', () => {
                     @@validate(age >= 18)
                 }
 
-                type Age extends Int {
+                type Age with Int {
                     this Int
                 }
             `);
     });
 
-    it('supports type aliases with default values', async () => {
+    it('supports custom type primitives with default values', async () => {
         await loadSchema(`
                 datasource db {
                     provider = 'sqlite'
@@ -52,7 +52,7 @@ describe('Type alias tests', () => {
                     name UserName @default('')
                 }
 
-                type UserName extends String {
+                type UserName with String {
                     this String
                 }
             `);
@@ -72,7 +72,7 @@ describe('Type alias tests', () => {
                     name2 UserName
                 }
 
-                type UserName extends String {
+                type UserName with String {
                     this String @onlyOnce
                 }
 
@@ -94,7 +94,7 @@ describe('Type alias tests', () => {
                     email Email
                 }
 
-                type Email extends String {
+                type Email with String {
                     this String
 
                     @@validate(isEmail(this))
@@ -115,11 +115,11 @@ describe('Type alias tests', () => {
                     email Email
                 }
 
-                type Email extends String {
+                type Email with String {
                     this String @db.Text
                 }
             `,
-            'attribute "@db.Text" cannot be used with type aliases',
+            'attribute "@db.Text" cannot be used with primitive type defs',
         );
 
         await loadSchemaWithError(
@@ -134,7 +134,7 @@ describe('Type alias tests', () => {
                     email Email @gt(5)
                 }
 
-                type Email extends String {
+                type Email with String {
                     this String
                 }
             `,
@@ -154,7 +154,7 @@ describe('Type alias tests', () => {
                     email Email @length(1, 2) @db.Text
                 }
 
-                type Email extends String {
+                type Email with String {
                     this String
                 }
             `);
@@ -172,7 +172,7 @@ describe('Type alias tests', () => {
                     email Email
                 }
 
-                type Email extends String {
+                type Email with String {
                     this String @email
                 }
             `);

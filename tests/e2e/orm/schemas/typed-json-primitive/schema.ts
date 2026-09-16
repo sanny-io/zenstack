@@ -46,32 +46,38 @@ export class SchemaType implements SchemaDef {
             }
         }
     } as const;
-    typeAliases = {
+    typeDefs = {
         UserName: {
             name: "UserName",
-            type: "String",
-            this: {
-                attributes: [
-                    { name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(2) }, { name: "max", value: ExpressionUtils.literal(16) }] }
-                ] as readonly AttributeApplication[]
+            base: "String",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "String",
+                    attributes: [{ name: "@length", args: [{ name: "min", value: ExpressionUtils.literal(2) }, { name: "max", value: ExpressionUtils.literal(16) }] }] as readonly AttributeApplication[]
+                }
             }
         },
         Contact: {
             name: "Contact",
-            type: "String",
-            this: {
-                attributes: [
-                    { name: "@phone" }
-                ] as readonly AttributeApplication[]
+            base: "String",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "String",
+                    attributes: [{ name: "@phone" }] as readonly AttributeApplication[]
+                }
             }
         },
         Age: {
             name: "Age",
-            type: "Int",
-            this: {
-                attributes: [
-                    { name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(18) }] }
-                ] as readonly AttributeApplication[]
+            base: "Int",
+            fields: {
+                this: {
+                    name: "this",
+                    type: "Int",
+                    attributes: [{ name: "@gte", args: [{ name: "value", value: ExpressionUtils.literal(18) }] }] as readonly AttributeApplication[]
+                }
             }
         }
     } as const;

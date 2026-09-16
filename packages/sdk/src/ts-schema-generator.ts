@@ -27,15 +27,12 @@ import {
     isProcedure,
     isReferenceExpr,
     isThisExpr,
-    isTypeAlias,
     isTypeDef,
     isUnaryExpr,
     LiteralExpr,
     MemberAccessExpr,
     Procedure,
     ReferenceExpr,
-    TypeAlias,
-    TypeAliasThisField,
     TypeDef,
     UnaryExpr,
     type Model,
@@ -239,19 +236,6 @@ export class TsSchemaGenerator {
                       ),
                   ]
                 : []),
-
-            // typeAlises
-            ...(model.declarations.some(isTypeAlias)
-                ? [
-                      ts.factory.createPropertyDeclaration(
-                          undefined,
-                          'typeAliases',
-                          undefined,
-                          undefined,
-                          this.createAsConst(this.createTypeAliasesObject(model)),
-                      ),
-                  ]
-                : []),
         ];
 
         // enums
@@ -384,23 +368,10 @@ export class TsSchemaGenerator {
         return model.declarations.filter((d): d is TypeDef => isTypeDef(d) && !hasAttribute(d, '@@ignore'));
     }
 
-    private getAllTypeAliases(model: Model) {
-        return model.declarations.filter((d): d is TypeAlias => isTypeAlias(d) && !hasAttribute(d, '@@ignore'));
-    }
-
     private createTypeDefsObject(model: Model, lite: boolean): ts.Expression {
         return ts.factory.createObjectLiteralExpression(
             this.getAllTypeDefs(model).map((td) =>
                 ts.factory.createPropertyAssignment(td.name, this.createTypeDefObject(td, lite)),
-            ),
-            true,
-        );
-    }
-
-    private createTypeAliasesObject(model: Model): ts.Expression {
-        return ts.factory.createObjectLiteralExpression(
-            this.getAllTypeAliases(model).map((ta) =>
-                ts.factory.createPropertyAssignment(ta.name, this.createTypeAliasObject(ta)),
             ),
             true,
         );
@@ -573,58 +544,6 @@ export class TsSchemaGenerator {
         if (getAllAttributes(td).some((attr) => attr.decl.$refText === '@@strict')) {
             fields.push(ts.factory.createPropertyAssignment('strict', ts.factory.createTrue()));
         }
-
-        return ts.factory.createObjectLiteralExpression(fields, true);
-    }
-
-    private createTypeAliasObject(ta: TypeAlias): ts.Expression {
-        const allAttributes = ta.attributes;
-
-        const fields: ts.PropertyAssignment[] = [
-            // name
-            ts.factory.createPropertyAssignment('name', ts.factory.createStringLiteral(ta.name)),
-            ts.factory.createPropertyAssignment('type', ts.factory.createStringLiteral(ta.type)),
-
-            ...(ta.this.attributes.length > 0
-                ? [ts.factory.createPropertyAssignment('this', this.createTypeAliasThisObject(ta.this))]
-                : []),
-
-            // attributes
-            ...(allAttributes.length > 0
-                ? [
-                      ts.factory.createPropertyAssignment(
-                          'attributes',
-                          this.createAttributesTypeAssertion(
-                              ts.factory.createArrayLiteralExpression(
-                                  allAttributes.map((attr) => this.createAttributeObject(attr)),
-                                  true,
-                              ),
-                          ),
-                      ),
-                  ]
-                : []),
-        ];
-
-        return ts.factory.createObjectLiteralExpression(fields, true);
-    }
-
-    private createTypeAliasThisObject(thisField: TypeAliasThisField) {
-        const attributes = thisField.attributes;
-        const fields: ts.PropertyAssignment[] = [
-            ...(attributes.length > 0
-                ? [
-                      ts.factory.createPropertyAssignment(
-                          'attributes',
-                          this.createAttributesTypeAssertion(
-                              ts.factory.createArrayLiteralExpression(
-                                  attributes.map((attr) => this.createAttributeObject(attr)),
-                                  true,
-                              ),
-                          ),
-                      ),
-                  ]
-                : []),
-        ];
 
         return ts.factory.createObjectLiteralExpression(fields, true);
     }
@@ -1517,15 +1436,6 @@ export class TsSchemaGenerator {
                                   ),
                               ]
                             : []),
-                        ...(model.declarations.some(isTypeAlias)
-                            ? [
-                                  ts.factory.createImportSpecifier(
-                                      false,
-                                      undefined,
-                                      ts.factory.createIdentifier(`TypeAliasResult as $TypeAliasResult`),
-                                  ),
-                              ]
-                            : []),
                     ]),
                 ),
                 ts.factory.createStringLiteral('@zenstackhq/orm'),
@@ -1566,24 +1476,6 @@ export class TsSchemaGenerator {
                 typeDef = this.generateDocs(typeDef, td);
             }
             statements.push(typeDef);
-        }
-
-        // generate: export type TypeAlias = $TypeAliasResult<Schema, 'TypeAlias'>;
-        const typeAliases = this.getAllTypeAliases(model);
-        for (const ta of typeAliases) {
-            let typeAlias = ts.factory.createTypeAliasDeclaration(
-                [ts.factory.createModifier(ts.SyntaxKind.ExportKeyword)],
-                ta.name,
-                undefined,
-                ts.factory.createTypeReferenceNode('$TypeAliasResult', [
-                    ts.factory.createTypeReferenceNode('$Schema'),
-                    ts.factory.createLiteralTypeNode(ts.factory.createStringLiteral(ta.name)),
-                ]),
-            );
-            if (ta.comments.length > 0) {
-                typeAlias = this.generateDocs(typeAlias, ta);
-            }
-            statements.push(typeAlias);
         }
 
         // generate: export const Enum = $schema.enums.Enum['values'];
@@ -1695,7 +1587,7 @@ export class TsSchemaGenerator {
 
     private generateDocs<T extends ts.TypeAliasDeclaration | ts.VariableStatement>(
         tsDecl: T,
-        decl: DataModel | TypeDef | Enum | TypeAlias,
+        decl: DataModel | TypeDef | Enum,
     ): T {
         return ts.addSyntheticLeadingComment(
             tsDecl,

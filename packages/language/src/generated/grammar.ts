@@ -67,7 +67,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@74"
+                "$ref": "#/rules@72"
               },
               "arguments": []
             }
@@ -127,7 +127,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@46"
+              "$ref": "#/rules@47"
             },
             "arguments": []
           },
@@ -141,21 +141,14 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@51"
+              "$ref": "#/rules@56"
             },
             "arguments": []
           },
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@58"
-            },
-            "arguments": []
-          },
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@55"
+              "$ref": "#/rules@53"
             },
             "arguments": []
           }
@@ -174,7 +167,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -190,7 +183,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -231,7 +224,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -247,7 +240,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -288,7 +281,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -300,7 +293,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -336,7 +329,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -352,7 +345,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -393,7 +386,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -405,7 +398,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -475,7 +468,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@75"
+            "$ref": "#/rules@73"
           },
           "arguments": []
         }
@@ -494,7 +487,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@74"
+            "$ref": "#/rules@72"
           },
           "arguments": []
         }
@@ -513,7 +506,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@68"
+            "$ref": "#/rules@66"
           },
           "arguments": []
         }
@@ -628,7 +621,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@73"
+                "$ref": "#/rules@71"
               },
               "arguments": []
             }
@@ -720,7 +713,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@73"
+                "$ref": "#/rules@71"
               },
               "arguments": []
             }
@@ -914,7 +907,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
               "terminal": {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@57"
+                  "$ref": "#/rules@55"
                 },
                 "arguments": []
               },
@@ -1008,7 +1001,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@73"
+                "$ref": "#/rules@71"
               },
               "arguments": []
             }
@@ -1116,14 +1109,14 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@56"
+                    "$ref": "#/rules@54"
                   },
                   "arguments": []
                 },
                 {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@74"
+                    "$ref": "#/rules@72"
                   },
                   "arguments": []
                 }
@@ -1165,7 +1158,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "CrossReference",
               "type": {
-                "$ref": "#/rules@51"
+                "$ref": "#/rules@49"
               },
               "deprecatedSyntax": false,
               "isMulti": false
@@ -1398,7 +1391,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
         "terminal": {
           "$type": "RuleCall",
           "rule": {
-            "$ref": "#/rules@56"
+            "$ref": "#/rules@54"
           },
           "arguments": []
         }
@@ -1848,7 +1841,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -1871,7 +1864,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                     "terminal": {
                       "$type": "RuleCall",
                       "rule": {
-                        "$ref": "#/rules@56"
+                        "$ref": "#/rules@54"
                       },
                       "arguments": []
                     }
@@ -1955,7 +1948,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                     "terminal": {
                       "$type": "RuleCall",
                       "rule": {
-                        "$ref": "#/rules@56"
+                        "$ref": "#/rules@54"
                       },
                       "arguments": []
                     }
@@ -1990,7 +1983,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@62"
+                    "$ref": "#/rules@60"
                   },
                   "arguments": []
                 }
@@ -2095,7 +2088,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@67"
+                    "$ref": "#/rules@65"
                   },
                   "arguments": []
                 }
@@ -2173,7 +2166,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -2186,7 +2179,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@57"
+                "$ref": "#/rules@55"
               },
               "arguments": []
             }
@@ -2258,7 +2251,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@61"
+                "$ref": "#/rules@59"
               },
               "arguments": []
             },
@@ -2279,7 +2272,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -2291,7 +2284,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -2307,7 +2300,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@53"
+                "$ref": "#/rules@51"
               },
               "arguments": []
             }
@@ -2344,7 +2337,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@67"
+                    "$ref": "#/rules@65"
                   },
                   "arguments": []
                 }
@@ -2356,7 +2349,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@48"
+                    "$ref": "#/rules@46"
                   },
                   "arguments": []
                 }
@@ -2373,7 +2366,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                   "terminal": {
                     "$type": "RuleCall",
                     "rule": {
-                      "$ref": "#/rules@56"
+                      "$ref": "#/rules@54"
                     },
                     "arguments": []
                   },
@@ -2431,7 +2424,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -2448,7 +2441,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -2487,7 +2480,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@62"
+                    "$ref": "#/rules@60"
                   },
                   "arguments": []
                 }
@@ -2498,150 +2491,6 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "Keyword",
             "value": "}"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "TypeAlias",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "comments",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@76"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
-          },
-          {
-            "$type": "Keyword",
-            "value": "type"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "name",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@56"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "extends"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "type",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@67"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "{"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "this",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@47"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "attributes",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@62"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
-          },
-          {
-            "$type": "Keyword",
-            "value": "}"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "TypeAliasThisField",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Assignment",
-            "feature": "comments",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@76"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
-          },
-          {
-            "$type": "Keyword",
-            "value": "this"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "type",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@67"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "attributes",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@61"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
           }
         ]
       },
@@ -2698,7 +2547,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -2715,7 +2564,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -2734,7 +2583,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@50"
+                    "$ref": "#/rules@48"
                   },
                   "arguments": []
                 }
@@ -2746,7 +2595,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@62"
+                    "$ref": "#/rules@60"
                   },
                   "arguments": []
                 }
@@ -2777,7 +2626,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -2790,10 +2639,144 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@57"
+                "$ref": "#/rules@55"
               },
               "arguments": []
             }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "attributes",
+            "operator": "+=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@59"
+              },
+              "arguments": []
+            },
+            "cardinality": "*"
+          }
+        ]
+      },
+      "entry": false,
+      "fragment": false,
+      "parameters": []
+    },
+    {
+      "$type": "ParserRule",
+      "name": "FunctionDecl",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@74"
+            },
+            "arguments": [],
+            "cardinality": "*"
+          },
+          {
+            "$type": "Keyword",
+            "value": "function"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@54"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "("
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "params",
+                "operator": "+=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@50"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Group",
+                "elements": [
+                  {
+                    "$type": "Keyword",
+                    "value": ","
+                  },
+                  {
+                    "$type": "Assignment",
+                    "feature": "params",
+                    "operator": "+=",
+                    "terminal": {
+                      "$type": "RuleCall",
+                      "rule": {
+                        "$ref": "#/rules@50"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "cardinality": "*"
+              }
+            ],
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": ")"
+          },
+          {
+            "$type": "Keyword",
+            "value": ":"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "returnType",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@51"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": "{"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "expression",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@8"
+              },
+              "arguments": []
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": "}"
           },
           {
             "$type": "Assignment",
@@ -2816,21 +2799,17 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
     },
     {
       "$type": "ParserRule",
-      "name": "FunctionDecl",
+      "name": "FunctionParam",
       "definition": {
         "$type": "Group",
         "elements": [
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
-          },
-          {
-            "$type": "Keyword",
-            "value": "function"
           },
           {
             "$type": "Assignment",
@@ -2839,7 +2818,205 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": ":"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "type",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@51"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "optional",
+            "operator": "?=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "?"
+            },
+            "cardinality": "?"
+          }
+        ]
+      },
+      "entry": false,
+      "fragment": false,
+      "parameters": []
+    },
+    {
+      "$type": "ParserRule",
+      "name": "FunctionParamType",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "Alternatives",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "type",
+                "operator": "=",
+                "terminal": {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@64"
+                  },
+                  "arguments": []
+                }
+              },
+              {
+                "$type": "Assignment",
+                "feature": "reference",
+                "operator": "=",
+                "terminal": {
+                  "$type": "CrossReference",
+                  "type": {
+                    "$ref": "#/types@2"
+                  },
+                  "terminal": {
+                    "$type": "RuleCall",
+                    "rule": {
+                      "$ref": "#/rules@54"
+                    },
+                    "arguments": []
+                  },
+                  "deprecatedSyntax": false,
+                  "isMulti": false
+                }
+              }
+            ]
+          },
+          {
+            "$type": "Group",
+            "elements": [
+              {
+                "$type": "Assignment",
+                "feature": "array",
+                "operator": "?=",
+                "terminal": {
+                  "$type": "Keyword",
+                  "value": "["
+                }
+              },
+              {
+                "$type": "Keyword",
+                "value": "]"
+              }
+            ],
+            "cardinality": "?"
+          }
+        ]
+      },
+      "entry": false,
+      "fragment": false,
+      "parameters": []
+    },
+    {
+      "$type": "ParserRule",
+      "name": "ProcedureParam",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@74"
+            },
+            "arguments": [],
+            "cardinality": "*"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@54"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Keyword",
+            "value": ":"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "type",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@51"
+              },
+              "arguments": []
+            }
+          },
+          {
+            "$type": "Assignment",
+            "feature": "optional",
+            "operator": "?=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "?"
+            },
+            "cardinality": "?"
+          }
+        ]
+      },
+      "entry": false,
+      "fragment": false,
+      "parameters": []
+    },
+    {
+      "$type": "ParserRule",
+      "name": "Procedure",
+      "definition": {
+        "$type": "Group",
+        "elements": [
+          {
+            "$type": "RuleCall",
+            "rule": {
+              "$ref": "#/rules@74"
+            },
+            "arguments": [],
+            "cardinality": "*"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "mutation",
+            "operator": "?=",
+            "terminal": {
+              "$type": "Keyword",
+              "value": "mutation"
+            },
+            "cardinality": "?"
+          },
+          {
+            "$type": "Keyword",
+            "value": "procedure"
+          },
+          {
+            "$type": "Assignment",
+            "feature": "name",
+            "operator": "=",
+            "terminal": {
+              "$type": "RuleCall",
+              "rule": {
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -2903,335 +3080,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@53"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "{"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "expression",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@8"
-              },
-              "arguments": []
-            },
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": "}"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "attributes",
-            "operator": "+=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@63"
-              },
-              "arguments": []
-            },
-            "cardinality": "*"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "FunctionParam",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@76"
-            },
-            "arguments": [],
-            "cardinality": "*"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "name",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@56"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": ":"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "type",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@53"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "optional",
-            "operator": "?=",
-            "terminal": {
-              "$type": "Keyword",
-              "value": "?"
-            },
-            "cardinality": "?"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "FunctionParamType",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "Alternatives",
-            "elements": [
-              {
-                "$type": "Assignment",
-                "feature": "type",
-                "operator": "=",
-                "terminal": {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$ref": "#/rules@66"
-                  },
-                  "arguments": []
-                }
-              },
-              {
-                "$type": "Assignment",
-                "feature": "reference",
-                "operator": "=",
-                "terminal": {
-                  "$type": "CrossReference",
-                  "type": {
-                    "$ref": "#/types@2"
-                  },
-                  "terminal": {
-                    "$type": "RuleCall",
-                    "rule": {
-                      "$ref": "#/rules@56"
-                    },
-                    "arguments": []
-                  },
-                  "deprecatedSyntax": false,
-                  "isMulti": false
-                }
-              }
-            ]
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Assignment",
-                "feature": "array",
-                "operator": "?=",
-                "terminal": {
-                  "$type": "Keyword",
-                  "value": "["
-                }
-              },
-              {
-                "$type": "Keyword",
-                "value": "]"
-              }
-            ],
-            "cardinality": "?"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "ProcedureParam",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@76"
-            },
-            "arguments": [],
-            "cardinality": "*"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "name",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@56"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": ":"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "type",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@53"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Assignment",
-            "feature": "optional",
-            "operator": "?=",
-            "terminal": {
-              "$type": "Keyword",
-              "value": "?"
-            },
-            "cardinality": "?"
-          }
-        ]
-      },
-      "entry": false,
-      "fragment": false,
-      "parameters": []
-    },
-    {
-      "$type": "ParserRule",
-      "name": "Procedure",
-      "definition": {
-        "$type": "Group",
-        "elements": [
-          {
-            "$type": "RuleCall",
-            "rule": {
-              "$ref": "#/rules@76"
-            },
-            "arguments": [],
-            "cardinality": "*"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "mutation",
-            "operator": "?=",
-            "terminal": {
-              "$type": "Keyword",
-              "value": "mutation"
-            },
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": "procedure"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "name",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@56"
-              },
-              "arguments": []
-            }
-          },
-          {
-            "$type": "Keyword",
-            "value": "("
-          },
-          {
-            "$type": "Group",
-            "elements": [
-              {
-                "$type": "Assignment",
-                "feature": "params",
-                "operator": "+=",
-                "terminal": {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$ref": "#/rules@54"
-                  },
-                  "arguments": []
-                }
-              },
-              {
-                "$type": "Group",
-                "elements": [
-                  {
-                    "$type": "Keyword",
-                    "value": ","
-                  },
-                  {
-                    "$type": "Assignment",
-                    "feature": "params",
-                    "operator": "+=",
-                    "terminal": {
-                      "$type": "RuleCall",
-                      "rule": {
-                        "$ref": "#/rules@54"
-                      },
-                      "arguments": []
-                    }
-                  }
-                ],
-                "cardinality": "*"
-              }
-            ],
-            "cardinality": "?"
-          },
-          {
-            "$type": "Keyword",
-            "value": ")"
-          },
-          {
-            "$type": "Keyword",
-            "value": ":"
-          },
-          {
-            "$type": "Assignment",
-            "feature": "returnType",
-            "operator": "=",
-            "terminal": {
-              "$type": "RuleCall",
-              "rule": {
-                "$ref": "#/rules@53"
+                "$ref": "#/rules@51"
               },
               "arguments": []
             }
@@ -3243,7 +3092,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@63"
+                "$ref": "#/rules@61"
               },
               "arguments": []
             },
@@ -3265,7 +3114,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@73"
+              "$ref": "#/rules@71"
             },
             "arguments": []
           },
@@ -3329,7 +3178,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@56"
+              "$ref": "#/rules@54"
             },
             "arguments": []
           },
@@ -3408,7 +3257,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -3428,21 +3277,21 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 {
                   "$type": "RuleCall",
                   "rule": {
+                    "$ref": "#/rules@68"
+                  },
+                  "arguments": []
+                },
+                {
+                  "$type": "RuleCall",
+                  "rule": {
+                    "$ref": "#/rules@69"
+                  },
+                  "arguments": []
+                },
+                {
+                  "$type": "RuleCall",
+                  "rule": {
                     "$ref": "#/rules@70"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$ref": "#/rules@71"
-                  },
-                  "arguments": []
-                },
-                {
-                  "$type": "RuleCall",
-                  "rule": {
-                    "$ref": "#/rules@72"
                   },
                   "arguments": []
                 }
@@ -3463,7 +3312,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@59"
+                    "$ref": "#/rules@57"
                   },
                   "arguments": []
                 }
@@ -3482,7 +3331,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                     "terminal": {
                       "$type": "RuleCall",
                       "rule": {
-                        "$ref": "#/rules@59"
+                        "$ref": "#/rules@57"
                       },
                       "arguments": []
                     }
@@ -3504,7 +3353,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@63"
+                "$ref": "#/rules@61"
               },
               "arguments": []
             },
@@ -3529,7 +3378,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@76"
+                "$ref": "#/rules@74"
               },
               "arguments": []
             },
@@ -3552,7 +3401,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@56"
+                "$ref": "#/rules@54"
               },
               "arguments": []
             }
@@ -3568,7 +3417,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@60"
+                "$ref": "#/rules@58"
               },
               "arguments": []
             }
@@ -3580,7 +3429,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@63"
+                "$ref": "#/rules@61"
               },
               "arguments": []
             },
@@ -3611,7 +3460,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                     {
                       "$type": "RuleCall",
                       "rule": {
-                        "$ref": "#/rules@66"
+                        "$ref": "#/rules@64"
                       },
                       "arguments": []
                     },
@@ -3642,7 +3491,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                   "terminal": {
                     "$type": "RuleCall",
                     "rule": {
-                      "$ref": "#/rules@56"
+                      "$ref": "#/rules@54"
                     },
                     "arguments": []
                   },
@@ -3700,12 +3549,12 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "CrossReference",
               "type": {
-                "$ref": "#/rules@58"
+                "$ref": "#/rules@56"
               },
               "terminal": {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@72"
+                  "$ref": "#/rules@70"
                 },
                 "arguments": []
               },
@@ -3723,7 +3572,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@64"
+                  "$ref": "#/rules@62"
                 },
                 "arguments": [],
                 "cardinality": "?"
@@ -3750,7 +3599,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "RuleCall",
             "rule": {
-              "$ref": "#/rules@76"
+              "$ref": "#/rules@74"
             },
             "arguments": [],
             "cardinality": "*"
@@ -3762,12 +3611,12 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "CrossReference",
               "type": {
-                "$ref": "#/rules@58"
+                "$ref": "#/rules@56"
               },
               "terminal": {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@71"
+                  "$ref": "#/rules@69"
                 },
                 "arguments": []
               },
@@ -3785,7 +3634,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@64"
+                  "$ref": "#/rules@62"
                 },
                 "arguments": [],
                 "cardinality": "?"
@@ -3816,12 +3665,12 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "CrossReference",
               "type": {
-                "$ref": "#/rules@58"
+                "$ref": "#/rules@56"
               },
               "terminal": {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@70"
+                  "$ref": "#/rules@68"
                 },
                 "arguments": []
               },
@@ -3839,7 +3688,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
               {
                 "$type": "RuleCall",
                 "rule": {
-                  "$ref": "#/rules@64"
+                  "$ref": "#/rules@62"
                 },
                 "arguments": [],
                 "cardinality": "?"
@@ -3871,7 +3720,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
             "terminal": {
               "$type": "RuleCall",
               "rule": {
-                "$ref": "#/rules@65"
+                "$ref": "#/rules@63"
               },
               "arguments": []
             }
@@ -3890,7 +3739,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@65"
+                    "$ref": "#/rules@63"
                   },
                   "arguments": []
                 }
@@ -3919,7 +3768,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
                 "terminal": {
                   "$type": "RuleCall",
                   "rule": {
-                    "$ref": "#/rules@56"
+                    "$ref": "#/rules@54"
                   },
                   "arguments": []
                 }
@@ -4213,7 +4062,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/rules@52"
+              "$ref": "#/rules@50"
             }
           },
           {
@@ -4225,7 +4074,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/rules@50"
+              "$ref": "#/rules@48"
             }
           },
           {
@@ -4268,13 +4117,7 @@ export const ZModelGrammar = (): Grammar => loadedZModelGrammar ?? (loadedZModel
           {
             "$type": "SimpleType",
             "typeRef": {
-              "$ref": "#/rules@49"
-            }
-          },
-          {
-            "$type": "SimpleType",
-            "typeRef": {
-              "$ref": "#/rules@46"
+              "$ref": "#/rules@47"
             }
           }
         ]

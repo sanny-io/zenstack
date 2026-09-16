@@ -20,7 +20,6 @@ import {
     isPlugin,
     isPluginField,
     isReferenceExpr,
-    isTypeAlias,
     isTypeDef,
     type AstNode,
 } from './ast';
@@ -45,14 +44,7 @@ export class ZModelSemanticTokenProvider extends AbstractSemanticTokenProvider {
                 property: 'baseModel',
                 type: SemanticTokenTypes.type,
             });
-        } else if (
-            isDataSource(node) ||
-            isGeneratorDecl(node) ||
-            isPlugin(node) ||
-            isEnum(node) ||
-            isTypeDef(node) ||
-            isTypeAlias(node)
-        ) {
+        } else if (isDataSource(node) || isGeneratorDecl(node) || isPlugin(node) || isEnum(node) || isTypeDef(node)) {
             acceptor({
                 node,
                 property: 'name',

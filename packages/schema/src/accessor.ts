@@ -6,7 +6,6 @@ import type {
     ModelDef,
     ProcedureDef,
     SchemaDef,
-    TypeAliasDef,
     TypeDefDef,
 } from './schema';
 
@@ -56,16 +55,6 @@ type Accessors = {
      * Gets a type definition by name. Throws an error if the type definition is not found.
      */
     requireTypeDef(name: string): TypeDefDef;
-
-    /**
-     * Gets a type alias definition by name. Returns `undefined` if the type alias definition is not found.
-     */
-    getTypeAlias(name: string): TypeAliasDef | undefined;
-
-    /**
-     * Gets a type alias definition by name. Throws an error if the type definition is not found.
-     */
-    requireTypeAlias(name: string): TypeAliasDef;
 
     /**
      * Gets a procedure definition by name. Returns `undefined` if the procedure is not found.
@@ -168,16 +157,6 @@ const accessors: Accessors = {
         const typeDef = this.schema.typeDefs?.[name];
         if (!typeDef) throw new InvalidSchemaError(`TypeDef "${name}" not found in schema`);
         return typeDef;
-    },
-
-    getTypeAlias(this: { schema: SchemaDef }, name: string) {
-        return this.schema.typeAliases?.[name];
-    },
-
-    requireTypeAlias(this: { schema: SchemaDef }, name: string) {
-        const typeAlias = this.schema.typeAliases?.[name];
-        if (!typeAlias) throw new InvalidSchemaError(`TypeAlias "${name}" not found in schema`);
-        return typeAlias;
     },
 
     getProcedure(this: { schema: SchemaDef }, name: string) {

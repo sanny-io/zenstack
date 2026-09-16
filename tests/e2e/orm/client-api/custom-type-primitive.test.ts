@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ClientContract } from '@zenstackhq/orm';
-import { schema } from '../schemas/type-alias/schema';
+import { schema } from '../schemas/typed-json-primitive/schema';
 import { createTestClient } from '@zenstackhq/testtools';
 
 process.env['TEST_DB_PROVIDER'] = 'postgresql';
 
-describe('Type alias tests', () => {
+describe('Custom type primitive tests', () => {
     let client: ClientContract<typeof schema>;
 
     beforeEach(async () => {

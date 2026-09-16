@@ -9,8 +9,6 @@ import type {
     GetModelFields,
     GetModelFieldType,
     GetModels,
-    GetTypeAliases,
-    GetTypeAliasType,
     GetTypeDefFields,
     GetTypeDefFieldType,
     GetTypeDefs,
@@ -115,11 +113,6 @@ type FieldTypeZodMap = {
     Json: JsonZodType;
 };
 
-export type MapTypeAliasToZod<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> =
-    GetTypeAliasType<Schema, TypeAlias> extends keyof FieldTypeZodMap
-        ? FieldTypeZodMap[GetTypeAliasType<Schema, TypeAlias>]
-        : never;
-
 type MapModelFieldToZod<
     Schema extends SchemaDef,
     Model extends GetModels<Schema>,
@@ -147,9 +140,7 @@ type MapFieldTypeToZod<Schema extends SchemaDef, FieldType> = FieldType extends 
       ? EnumZodType<Schema, FieldType>
       : FieldType extends GetTypeDefs<Schema>
         ? MapTypeDefToZod<Schema, FieldType>
-        : FieldType extends GetTypeAliases<Schema>
-          ? MapTypeAliasToZod<Schema, FieldType>
-          : z.ZodUnknown;
+        : z.ZodUnknown;
 
 export type JsonValue = string | number | boolean | JsonObject | JsonArray | null;
 type JsonObject = { [key: string]: JsonValue };

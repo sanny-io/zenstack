@@ -86,7 +86,7 @@ export type ZModelKeywordNames =
 
 export type ZModelTokenNames = ZModelTerminalNames | ZModelKeywordNames;
 
-export type AbstractDeclaration = Attribute | DataModel | DataSource | Enum | FunctionDecl | GeneratorDecl | Plugin | Procedure | TypeAlias | TypeDef;
+export type AbstractDeclaration = Attribute | DataModel | DataSource | Enum | FunctionDecl | GeneratorDecl | Plugin | Procedure | TypeDef;
 
 export const AbstractDeclaration = {
     $type: 'AbstractDeclaration'
@@ -373,7 +373,7 @@ export function isDataField(item: unknown): item is DataField {
 }
 
 export interface DataFieldAttribute extends langium.AstNode {
-    readonly $container: DataField | EnumField | TypeAliasThisField;
+    readonly $container: DataField | EnumField;
     readonly $type: 'DataFieldAttribute';
     args: Array<AttributeArg>;
     decl: langium.Reference<Attribute>;
@@ -461,7 +461,7 @@ export function isDataModel(item: unknown): item is DataModel {
 }
 
 export interface DataModelAttribute extends langium.AstNode {
-    readonly $container: DataModel | Enum | TypeAlias | TypeDef;
+    readonly $container: DataModel | Enum | TypeDef;
     readonly $type: 'DataModelAttribute';
     args: Array<AttributeArg>;
     decl: langium.Reference<Attribute>;
@@ -954,49 +954,7 @@ export function isThisExpr(item: unknown): item is ThisExpr {
     return reflection.isInstance(item, ThisExpr.$type);
 }
 
-export interface TypeAlias extends langium.AstNode {
-    readonly $container: Model;
-    readonly $type: 'TypeAlias';
-    attributes: Array<DataModelAttribute>;
-    comments: Array<string>;
-    name: RegularID;
-    this: TypeAliasThisField;
-    type: BuiltinType;
-}
-
-export const TypeAlias = {
-    $type: 'TypeAlias',
-    attributes: 'attributes',
-    comments: 'comments',
-    name: 'name',
-    this: 'this',
-    type: 'type'
-} as const;
-
-export function isTypeAlias(item: unknown): item is TypeAlias {
-    return reflection.isInstance(item, TypeAlias.$type);
-}
-
-export interface TypeAliasThisField extends langium.AstNode {
-    readonly $container: TypeAlias;
-    readonly $type: 'TypeAliasThisField';
-    attributes: Array<DataFieldAttribute>;
-    comments: Array<string>;
-    type: BuiltinType;
-}
-
-export const TypeAliasThisField = {
-    $type: 'TypeAliasThisField',
-    attributes: 'attributes',
-    comments: 'comments',
-    type: 'type'
-} as const;
-
-export function isTypeAliasThisField(item: unknown): item is TypeAliasThisField {
-    return reflection.isInstance(item, TypeAliasThisField.$type);
-}
-
-export type TypeDeclaration = DataModel | Enum | TypeAlias | TypeDef;
+export type TypeDeclaration = DataModel | Enum | TypeDef;
 
 export const TypeDeclaration = {
     $type: 'TypeDeclaration'
@@ -1113,8 +1071,6 @@ export type ZModelAstType = {
     ReferenceTarget: ReferenceTarget
     StringLiteral: StringLiteral
     ThisExpr: ThisExpr
-    TypeAlias: TypeAlias
-    TypeAliasThisField: TypeAliasThisField
     TypeDeclaration: TypeDeclaration
     TypeDef: TypeDef
     UnaryExpr: UnaryExpr
@@ -1797,46 +1753,6 @@ export class ZModelAstReflection extends langium.AbstractAstReflection {
                 }
             },
             superTypes: [Expression.$type]
-        },
-        TypeAlias: {
-            name: TypeAlias.$type,
-            properties: {
-                attributes: {
-                    name: TypeAlias.attributes,
-                    defaultValue: []
-                },
-                comments: {
-                    name: TypeAlias.comments,
-                    defaultValue: []
-                },
-                name: {
-                    name: TypeAlias.name
-                },
-                this: {
-                    name: TypeAlias.this
-                },
-                type: {
-                    name: TypeAlias.type
-                }
-            },
-            superTypes: [AbstractDeclaration.$type, TypeDeclaration.$type]
-        },
-        TypeAliasThisField: {
-            name: TypeAliasThisField.$type,
-            properties: {
-                attributes: {
-                    name: TypeAliasThisField.attributes,
-                    defaultValue: []
-                },
-                comments: {
-                    name: TypeAliasThisField.comments,
-                    defaultValue: []
-                },
-                type: {
-                    name: TypeAliasThisField.type
-                }
-            },
-            superTypes: []
         },
         TypeDeclaration: {
             name: TypeDeclaration.$type,

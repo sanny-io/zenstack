@@ -13,7 +13,6 @@ export type SchemaDef = {
     models: Record<string, ModelDef>;
     enums?: Record<string, EnumDef>;
     typeDefs?: Record<string, TypeDefDef>;
-    typeAliases?: Record<string, TypeAliasDef>;
     plugins: Record<string, unknown>;
     procedures?: Record<string, ProcedureDef>;
     authType?: GetModels<SchemaDef> | GetTypeDefs<SchemaDef>;
@@ -135,15 +134,6 @@ export type TypeDefDef = {
     attributes?: readonly AttributeApplication[];
 };
 
-export type TypeAliasDef = {
-    name: string;
-    type: BuiltinType;
-    attributes?: readonly AttributeApplication[];
-    this?: {
-        attributes?: readonly AttributeApplication[];
-    };
-};
-
 //#region Extraction
 
 export type GetModels<Schema extends SchemaDef> = Extract<keyof Schema['models'], string>;
@@ -171,11 +161,6 @@ export type GetTypeDefs<Schema extends SchemaDef> = Extract<keyof Schema['typeDe
 
 export type GetTypeDef<Schema extends SchemaDef, TypeDef extends GetTypeDefs<Schema>> =
     Schema['typeDefs'] extends Record<string, unknown> ? Schema['typeDefs'][TypeDef] : never;
-
-export type GetTypeAliases<Schema extends SchemaDef> = Extract<keyof Schema['typeAliases'], string>;
-
-export type GetTypeAlias<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> =
-    Schema['typeAliases'] extends Record<string, unknown> ? Schema['typeAliases'][TypeAlias] : never;
 
 export type GetModelFields<Schema extends SchemaDef, Model extends GetModels<Schema>> = keyof {
     [Key in Extract<keyof GetModel<Schema, Model>['fields'], string> as FieldIsUnsupported<
@@ -211,9 +196,6 @@ export type GetModelFieldType<
     Model extends GetModels<Schema>,
     Field extends GetModelFields<Schema, Model>,
 > = Schema['models'][Model]['fields'][Field]['type'];
-
-export type GetTypeAliasType<Schema extends SchemaDef, TypeAlias extends GetTypeAliases<Schema>> =
-    Schema['typeAliases'] extends Record<string, TypeAliasDef> ? Schema['typeAliases'][TypeAlias]['type'] : never;
 
 export type GetTypeDefFields<Schema extends SchemaDef, TypeDef extends GetTypeDefs<Schema>> = Extract<
     keyof GetTypeDef<Schema, TypeDef>['fields'],
@@ -306,7 +288,7 @@ export type TypeDefFieldIsArray<
 export type TypeDefIsPrimitive<Schema extends SchemaDef, TypeDef extends GetTypeDefs<Schema>> = GetTypeDef<
     Schema,
     TypeDef
->['base'] extends true
+>['base'] extends string
     ? true
     : false;
 

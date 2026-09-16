@@ -47,9 +47,6 @@ export const DeclarationBuilder = () =>
         get TypeDef(): any {
             throw new Error('TypeDef is not implemented');
         },
-        get TypeAlias(): any {
-            throw new Error('TypeAlias is not implemented');
-        },
     }) satisfies DeclarationBuilderType;
 type DeclarationBuilderType<T extends AbstractDeclaration = AbstractDeclaration> = {
     [K in T['$type']]: AstFactory<Extract<T, { $type: K }>>;

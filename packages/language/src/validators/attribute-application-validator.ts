@@ -1,7 +1,7 @@
 import { invariant } from '@zenstackhq/common-helpers';
 import { AstUtils, type ValidationAcceptor } from 'langium';
 import pluralize from 'pluralize';
-import type { BinaryExpr, DataModel, Expression, TypeAliasThisField } from '../ast';
+import type { BinaryExpr, DataModel, Expression } from '../ast';
 import {
     ArrayExpr,
     Attribute,
@@ -22,7 +22,6 @@ import {
     isModel,
     isReferenceExpr,
     isStringLiteral,
-    isTypeAliasThisField,
     isTypeDef,
 } from '../generated/ast';
 import {
@@ -703,7 +702,7 @@ function assignableToAttributeParam(
     }
 }
 
-function isValidAttributeTarget(attrDecl: Attribute, targetDecl: DataField | TypeAliasThisField) {
+function isValidAttributeTarget(attrDecl: Attribute, targetDecl: DataField) {
     const targetField = attrDecl.attributes.find((attr) => attr.decl.ref?.name === '@@@targetField');
     if (!targetField?.args[0]) {
         // no field type constraint
@@ -722,9 +721,7 @@ function isValidAttributeTarget(attrDecl: Attribute, targetDecl: DataField | Typ
         .filter((name): name is string => !!name);
 
     let allowed = false;
-    const targetDeclType = isTypeAliasThisField(targetDecl)
-        ? targetDecl.type
-        : (targetDecl.$resolvedType?.decl ?? (targetDecl as any).type.type);
+    const targetDeclType = targetDecl.$resolvedType?.decl ?? targetDecl.type.type;
     for (const allowedType of fieldTypes) {
         switch (allowedType) {
             case 'StringField':
