@@ -1,22 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type { ClientContract } from '@zenstackhq/orm';
-import { schema } from '../schemas/typed-json-primitive/schema';
+import { schema } from '../schemas/custom-type-primitive/schema';
 import { createTestClient } from '@zenstackhq/testtools';
-
-process.env['TEST_DB_PROVIDER'] = 'postgresql';
 
 describe('Custom type primitive tests', () => {
     let client: ClientContract<typeof schema>;
 
     beforeEach(async () => {
-        client = await createTestClient(schema);
+        client = await createTestClient(schema, {
+            provider: 'postgresql',
+        });
     });
 
     afterEach(async () => {
         await client?.$disconnect();
     });
 
-    it('works', async () => {
+    it('works with scalars', async () => {
         await expect(
             client.user.create({
                 data: {
@@ -34,9 +34,18 @@ describe('Custom type primitive tests', () => {
                 },
             }),
         ).rejects.toThrow(/Too small/);
+
+        await expect(
+            client.user.create({
+                data: {
+                    name: 'test',
+                    age: 17,
+                },
+            }),
+        ).rejects.toThrow(/Too small/);
     });
 
-    it('works 2', async () => {
+    it('works with arrays', async () => {
         await expect(
             client.user.create({
                 data: {
@@ -48,28 +57,14 @@ describe('Custom type primitive tests', () => {
             name: 'test',
             contacts: ['+15555555555'],
         });
-    });
-
-    it('works 3', async () => {
-        await expect(
-            client.user.create({
-                data: {
-                    name: 'test',
-                    age: 19,
-                },
-            }),
-        ).resolves.toMatchObject({
-            name: 'test',
-            age: 19,
-        });
 
         await expect(
             client.user.create({
                 data: {
                     name: 'test',
-                    age: 17,
+                    contacts: ['15555555555'],
                 },
             }),
-        ).rejects.toThrow(/Too small/);
+        ).rejects.toThrow(/Invalid E.164/);
     });
 });

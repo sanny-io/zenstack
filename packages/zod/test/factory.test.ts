@@ -1575,7 +1575,7 @@ describe.each([
         });
     });
 
-    describe('type alias', () => {
+    describe('custom type primitives', () => {
         it('supports model validation using `this` attributes', () => {
             const postSchema = factory.makeModelSchema('Post');
             const result = postSchema.safeParse({ ...validPost, tags: ['LOWERCASED'] });
